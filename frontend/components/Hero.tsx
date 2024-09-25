@@ -8,7 +8,7 @@ const Hero = () => {
         alt="Hero"
         width={720}
         height={720}
-        className="object-contain"
+        className="object-contain m-auto my-20"
       />
     </div>
   );
