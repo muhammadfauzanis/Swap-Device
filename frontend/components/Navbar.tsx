@@ -42,7 +42,7 @@ const Navbar = () => {
             Login
           </h3>
         </div> */}
-        <Button>Login</Button>
+        <Button className="hidden sm:hidden md:block">Login</Button>
 
         <RxHamburgerMenu
           size={20}
