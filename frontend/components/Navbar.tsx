@@ -8,7 +8,7 @@ import { Button } from './ui/button';
 const Navbar = () => {
   const [show, setShow] = useState(false);
   return (
-    <nav className="flex justify-between items-center w-full my-3 px-5">
+    <nav className="flex justify-between items-center w-[90%] m-auto my-3 px-5">
       <h1 className="text-xl font-bold italic cursor-pointer">Swap Device</h1>
 
       <div className="bg-gray-100 p-3 lg:px-5 rounded-full hidden sm:hidden md:block">
