@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { CiHeart, CiSearch } from 'react-icons/ci';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { Button } from './ui/button';
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
@@ -36,11 +37,12 @@ const Navbar = () => {
           size={25}
           className="hover:text-gray-300 transition-all duration-300"
         />
-        <div className="bg-black  rounded-full hover:bg-gray-100 transition-all duration-300 hidden sm:hidden md:block">
+        {/* <div className="bg-black  rounded-full hover:bg-gray-100 transition-all duration-300 hidden sm:hidden md:block">
           <h3 className="text-white py-2 px-5 text-md hover:text-black transition-all duration-300">
             Login
           </h3>
-        </div>
+        </div> */}
+        <Button>Login</Button>
 
         <RxHamburgerMenu
           size={20}
