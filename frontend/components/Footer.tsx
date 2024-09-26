@@ -39,6 +39,9 @@ const Footer = () => {
             <a href="" className="hover:underline">
               Airpods
             </a>
+            <a href="" className="hover:underline">
+              Watch
+            </a>
           </ul>
         </div>
         <div>
