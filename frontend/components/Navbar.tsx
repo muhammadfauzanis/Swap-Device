@@ -23,6 +23,9 @@ const Navbar = () => {
             Mac
           </li>
           <li className="hover:font-bold transition ease-in-out duration-500">
+            Watch
+          </li>
+          <li className="hover:font-bold transition ease-in-out duration-500">
             AirPods
           </li>
         </ul>
