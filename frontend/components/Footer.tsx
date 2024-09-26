@@ -37,10 +37,10 @@ const Footer = () => {
               Mac
             </a>
             <a href="" className="hover:underline">
-              Airpods
+              Watch
             </a>
             <a href="" className="hover:underline">
-              Watch
+              Airpods
             </a>
           </ul>
         </div>

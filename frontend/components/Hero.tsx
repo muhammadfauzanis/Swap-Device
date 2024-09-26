@@ -6,8 +6,8 @@ const Hero = () => {
       <ProductCarousel productType="iPhone" imageSource="/iphone_hero.png" />
       <ProductCarousel productType="iPad" imageSource="/ipad.jpg" />
       <ProductCarousel productType="Macbook" imageSource="/macbook.jpg" />
-      <ProductCarousel productType="Airpods" imageSource="/airpods.png" />
       <ProductCarousel productType="Watch" imageSource="/watch.png" />
+      <ProductCarousel productType="Airpods" imageSource="/airpods.png" />
     </div>
   );
 };

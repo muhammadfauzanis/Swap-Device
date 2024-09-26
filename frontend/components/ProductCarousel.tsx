@@ -20,7 +20,7 @@ const ProductCarousel = ({
   return (
     <div className="flex flex-col items-center w-full mt-20">
       <div className="flex justify-between w-full items-center">
-        <h1 className="text-6xl font-bold">{productType}</h1>
+        <h1 className="text-4xl md:text-6xl font-bold">{productType}</h1>
         <Button variant={'outline'}>See More</Button>
       </div>
 
