@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from './ui/carousel';
+import ProductCard from './ProductCard';
 
 interface ProductCarouselProps {
   productType: string;
@@ -54,16 +55,7 @@ const ProductCarousel = ({
           <CarouselContent>
             {Array.from({ length: 5 }).map(() => (
               <CarouselItem className="md:basis-1/3 lg:basis-1/4 flex flex-col items-center justify-center cursor-pointer">
-                <div className="p-1">
-                  <Image
-                    src={'/iphone.png'}
-                    alt="Iphone"
-                    width={120}
-                    height={150}
-                  />
-                  <p className="py-2">iPhone 15 Pro Max</p>
-                  <p className="font-bold">IDR 14,000,000</p>
-                </div>
+                <ProductCard />
               </CarouselItem>
             ))}
           </CarouselContent>
