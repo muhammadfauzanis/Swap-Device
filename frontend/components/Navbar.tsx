@@ -1,14 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CiHeart, CiSearch } from 'react-icons/ci';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { Button } from './ui/button';
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
+  const [header, setHeader] = useState(false);
+
+  const scrollHeader = () => {
+    if (window.scrollY >= 20) {
+      setHeader(true);
+    } else {
+      setHeader(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHeader);
+
+    return () => {
+      window.removeEventListener('scroll', scrollHeader);
+    };
+  }, []);
+
   return (
-    <nav className="flex justify-between items-center w-[90%] m-auto my-3 px-5">
+    <nav
+      className={`flex fixed -top-3 justify-between items-center m-auto my-3 w-full px-8 md:px-10 lg:px-20 xl:px-28 py-3 transition-all duration-300 ${
+        header ? '-top-3 left-0 bg-white z-50 shadow-md' : ''
+      }`}
+    >
       <h1 className="text-xl font-bold italic cursor-pointer">Swap Device</h1>
 
       <div className="bg-gray-100 p-3 lg:px-5 rounded-full hidden sm:hidden md:block">

@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 
 const Hero = () => {
   return (
-    <div className="flex flex-col justify-center items-center w-[90%] max-w-screen-xl m-auto px-5">
+    <div className="flex flex-col justify-center items-center w-[90%] max-w-screen-xl m-auto px-5 mt-10 md:mt-16 lg:mt-20">
       <div className="w-full flex justify-center items-center gap-x-20 mt-20">
         <div className="">
           <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold">
