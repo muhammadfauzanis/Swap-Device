@@ -8,24 +8,23 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const FilterProduct = () => {
+const SortingProductBox = () => {
   return (
     <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+      <SelectTrigger className="w-fit">
+        <SelectValue placeholder="Featured Item" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          <SelectLabel>Featured Item</SelectLabel>
+          <SelectItem value="best-match">Best Match</SelectItem>
+          <SelectItem value="newly-added">Newly Added</SelectItem>
+          <SelectItem value="highest-lowest">Highest to Lowest</SelectItem>
+          <SelectItem value="lowest-highest">Lowest to Highest</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
   );
 };
 
-export default FilterProduct;
+export default SortingProductBox;
