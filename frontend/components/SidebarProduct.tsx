@@ -46,7 +46,9 @@ const SidebarProduct = () => {
       </CardHeader>
       <CardContent className="flex flex-col gap-y-5">
         <RadioGroup defaultValue="" className="space-y-1.5">
-          <Label htmlFor="Condition">Condition</Label>
+          <Label htmlFor="Condition" className="font-bold">
+            Condition
+          </Label>
           <div className="flex gap-x-5">
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="default" id="r1" />
@@ -62,7 +64,9 @@ const SidebarProduct = () => {
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Price Range (IDR)</Label>
+              <Label htmlFor="name" className="pb-3 font-bold">
+                Price Range (IDR)
+              </Label>
               <Input id="name" placeholder="Minimum Price" />
               <Input id="name" placeholder="Maximum Price" />
             </div>
@@ -71,6 +75,10 @@ const SidebarProduct = () => {
 
         {/* Display checkboxes */}
         <div className="flex flex-col gap-y-2">
+          <Label htmlFor="name" className="pb-3 font-bold">
+            Models
+          </Label>
+
           {(showAll
             ? checkboxes
             : checkboxes.slice(0, initialDisplayCount)

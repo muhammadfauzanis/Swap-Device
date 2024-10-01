@@ -1,11 +1,31 @@
 import Image from 'next/image';
 
-const ProductCard = () => {
+interface ProductCardProps {
+  imageSource?: string;
+  productName?: string;
+  price?: string;
+  imageWidth: number;
+  imageHeight: number;
+}
+
+const ProductCard = ({
+  imageSource,
+  productName,
+  price,
+  imageWidth,
+  imageHeight,
+}: ProductCardProps) => {
   return (
     <div className="p-1 cursor-pointer">
-      <Image src={'/iphone.png'} alt="Iphone" width={120} height={150} />
-      <p className="py-2">iPhone 15 Pro Max</p>
-      <p className="font-bold">IDR 14,000,000</p>
+      <Image
+        src={'/iphone.png'}
+        alt="Iphone"
+        width={imageWidth}
+        height={imageHeight}
+        className="w-full"
+      />
+      <p className="py-2">{productName}</p>
+      <p className="font-bold">{price}</p>
     </div>
   );
 };

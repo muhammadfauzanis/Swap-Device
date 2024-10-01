@@ -18,7 +18,7 @@ const Hero = () => {
           src="/hero.png"
           alt="Hero"
           className="w-[50%] md:w-[70%]"
-          width={720}
+          width={1920}
           height={720}
         />{' '}
       </div>
