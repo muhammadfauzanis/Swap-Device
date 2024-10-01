@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import SidebarProduct from '@/components/SidebarProduct';
+import PageExplorer from '@/components/PageExplorer';
 
 const ProductPage = () => {
   return (
@@ -20,14 +21,45 @@ const ProductPage = () => {
           </div>
 
           <div className="lg:col-span-2 grid grid-cols-2 justify-items-center items-center gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            <ProductCard
+              imageWidth={150}
+              imageHeight={120}
+              productName="iPhone 15 Pro Max"
+              price="IDR 14.000.000"
+            />
+            <ProductCard
+              imageWidth={150}
+              imageHeight={120}
+              productName="iPhone 15 Pro Max"
+              price="IDR 14.000.000"
+            />
+            <ProductCard
+              imageWidth={150}
+              imageHeight={120}
+              productName="iPhone 15 Pro Max"
+              price="IDR 14.000.000"
+            />
+            <ProductCard
+              imageWidth={150}
+              imageHeight={120}
+              productName="iPhone 15 Pro Max"
+              price="IDR 14.000.000"
+            />
+            <ProductCard
+              imageWidth={150}
+              imageHeight={120}
+              productName="iPhone 15 Pro Max"
+              price="IDR 14.000.000"
+            />
+            <ProductCard
+              imageWidth={150}
+              imageHeight={120}
+              productName="iPhone 15 Pro Max"
+              price="IDR 14.000.000"
+            />
           </div>
         </div>
+        <PageExplorer />
       </div>
       <Footer />
     </div>
