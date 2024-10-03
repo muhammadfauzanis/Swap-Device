@@ -44,7 +44,7 @@ const ProductCarousel = ({
                   productName="iPhone 15 Pro Max"
                   price="IDR 14.000.000"
                   imageWidth={120}
-                  imageHeight={150}
+                  imageHeight={90}
                 />
               </CarouselItem>
             ))}
