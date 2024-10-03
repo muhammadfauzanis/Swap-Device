@@ -10,7 +10,7 @@ import {
 
 const PageExplorer = () => {
   return (
-    <Pagination>
+    <Pagination className="pt-10 ">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious href="#" />
