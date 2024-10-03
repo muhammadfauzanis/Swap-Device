@@ -1,13 +1,19 @@
+'use client';
+
 import { Card, CardContent } from '@/components/ui/card';
 import DetailProductCarousel from '@/components/DetailProductCarousel';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
-import ProductCarousel from '@/components/ProductCarousel';
 import Faq from '@/components/Faq';
 import { Button } from '@/components/ui/button';
+import { FaHeart, FaRegCopy, FaRegHeart } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DetailProductPage = () => {
+  const notify = () => toast.success('Berhasil Disalin');
+
   return (
     <div className="w-full min-h-screen">
       <Navbar />
@@ -22,9 +28,13 @@ const DetailProductPage = () => {
         </DetailProductCarousel>
 
         <div className="pt-5 ">
-          <h3 className="font-bold text-2xl lg:text-3xl xl:text-4xl">
-            iPhone 15 Pro Max
-          </h3>
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-2xl lg:text-3xl xl:text-4xl">
+              iPhone 15 Pro Max
+            </h3>
+            <FaRegHeart size={25} className="cursor-pointer" />
+            {/* <FaHeart size={25} className="cursor-pointer text-red-600" /> */}
+          </div>
 
           <p className="text-sm text-gray-400">Code</p>
           <p className="font-bold text-lg lg:text-xl">IDR 17.000.000</p>
@@ -78,6 +88,27 @@ const DetailProductPage = () => {
           </div>
 
           <Faq />
+
+          <div>
+            <Button
+              variant={'link'}
+              className="flex items-center mt-5 gap-x-3 font-bold"
+              onClick={notify}
+            >
+              <p>Bagikan</p>
+              <FaRegCopy size={15} />
+            </Button>
+            <ToastContainer
+              position="top-center"
+              autoClose={3000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              draggable
+              theme="colored"
+            />
+          </div>
         </div>
       </div>
 
