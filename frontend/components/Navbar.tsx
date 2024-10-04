@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { CiHeart, CiSearch } from 'react-icons/ci';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { Button } from './ui/button';
+import Link from 'next/link';
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
@@ -31,7 +32,9 @@ const Navbar = () => {
         header ? '-top-3 left-0 bg-white z-50 shadow-md' : ''
       }`}
     >
-      <h1 className="text-xl font-bold italic cursor-pointer">Swap Device</h1>
+      <Link href={'/'} className="text-xl font-bold italic cursor-pointer">
+        Swap Device
+      </Link>
 
       <div className="bg-gray-100 p-3 lg:px-5 rounded-full hidden sm:hidden md:block">
         <ul className="flex gap-x-5 lg:gap-x-9 mx-5 text-md cursor-pointer">
