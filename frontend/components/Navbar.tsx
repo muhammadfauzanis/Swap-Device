@@ -70,7 +70,9 @@ const Navbar = () => {
             Login
           </h3>
         </div> */}
-        <Button className="hidden sm:hidden md:block">Login</Button>
+        <Link href={'/login'}>
+          <Button className="hidden sm:hidden md:block">Login</Button>
+        </Link>
 
         <RxHamburgerMenu
           size={20}
