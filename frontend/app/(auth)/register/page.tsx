@@ -23,12 +23,11 @@ const RegisterPage = () => {
             <CardHeader>
               <CardTitle>Register</CardTitle>
               <CardDescription>
-                <p>
-                  Sudah memiliki akun?{' '}
-                  <Link href={'/login'} className="font-bold text-black">
-                    Login di sini
-                  </Link>
-                </p>{' '}
+                <span className="pr-1">Belum memiliki akun?</span>
+
+                <Link href={'/login'} className="font-bold text-black">
+                  Login di sini
+                </Link>
               </CardDescription>
             </CardHeader>
             <CardContent>
