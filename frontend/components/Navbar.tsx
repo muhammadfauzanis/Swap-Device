@@ -32,7 +32,7 @@ const Navbar = () => {
         header ? '-top-3 left-0 bg-white z-50 shadow-md' : ''
       }`}
     >
-      <Link href={'/'} className="text-xl font-bold italic cursor-pointer">
+      <Link href="/" className="text-xl font-bold italic cursor-pointer">
         Swap Device
       </Link>
 
@@ -61,16 +61,18 @@ const Navbar = () => {
           size={25}
           className="hover:text-gray-300 transition-all duration-300"
         />
-        <CiHeart
-          size={25}
-          className="hover:text-gray-300 transition-all duration-300"
-        />
+        <Link href="/wishlist">
+          <CiHeart
+            size={25}
+            className="hover:text-gray-300 transition-all duration-300"
+          />
+        </Link>
         {/* <div className="bg-black  rounded-full hover:bg-gray-100 transition-all duration-300 hidden sm:hidden md:block">
           <h3 className="text-white py-2 px-5 text-md hover:text-black transition-all duration-300">
             Login
           </h3>
         </div> */}
-        <Link href={'/login'}>
+        <Link href="/login">
           <Button className="hidden sm:hidden md:block">Login</Button>
         </Link>
 
@@ -80,8 +82,6 @@ const Navbar = () => {
           onClick={() => setShow(true)}
         />
       </div>
-
-      {/* {show && <div className="bg-red-500">halo</div>} */}
     </nav>
   );
 };
