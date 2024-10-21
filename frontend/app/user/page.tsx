@@ -14,7 +14,8 @@ const UserPage = () => {
 
           <div className="flex gap-x-10">
             <p className="font-bold">Nama Depan</p>
-            <p className="">Walter White</p>
+            <p className="">Walter Wte</p>
+            <p>sakdhaskjdhakjshdas</p>
           </div>
           <div className="flex gap-x-10">
             <p className="font-bold">Nama Depan</p>
