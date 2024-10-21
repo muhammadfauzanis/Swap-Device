@@ -13,7 +13,7 @@ const SideBarUser = () => {
 
       <div className="flex flex-col gap-y-3">
         <button className="hover:-translate-y-1 transition-all duration-300">
-          Profil Saya
+          Akun Saya
         </button>
         <hr />
         <button className="hover:-translate-y-1 transition-all duration-300">
