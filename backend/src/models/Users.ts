@@ -1,6 +1,6 @@
 import prisma from '../db';
 
-const findUserByEmail = async (email: string) => {
+export const findUserByEmail = async (email: string) => {
   const user = await prisma.user.findUnique({
     where: {
       email: email,
@@ -10,7 +10,7 @@ const findUserByEmail = async (email: string) => {
   return user;
 };
 
-const findUserByPhoneNumber = async (phoneNumber: string) => {
+export const findUserByPhoneNumber = async (phoneNumber: string) => {
   const user = await prisma.user.findUnique({
     where: {
       phone_number: phoneNumber,
@@ -20,10 +20,8 @@ const findUserByPhoneNumber = async (phoneNumber: string) => {
   return user;
 };
 
-const createUser = async (userData: any) => {
+export const createUser = async (userData: any) => {
   const user = await prisma.user.create({ data: userData });
 
   return user;
 };
-
-export default { findUserByEmail, findUserByPhoneNumber, createUser };
