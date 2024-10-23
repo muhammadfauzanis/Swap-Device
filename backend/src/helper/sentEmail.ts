@@ -15,8 +15,8 @@ function sendVerificationEmail(userEmail: string, verificationToken: string) {
   const mailOptions = {
     from: `Swap Device Team <${process.env.EMAIL}>`,
     to: userEmail,
-    subject: 'Verify your email',
-    text: VERIFICATION_EMAIL_TEMPLATE.replace(
+    subject: 'Verification Email Swap Device',
+    html: VERIFICATION_EMAIL_TEMPLATE.replace(
       '{verificationCode}',
       verificationToken
     ),
