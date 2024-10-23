@@ -8,7 +8,6 @@ import {
 import response from '../response';
 import express from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
 import { sendVerificationEmail } from '../helper/sentEmail';
@@ -48,7 +47,7 @@ export const signupUser = async (
 
         const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
 
-        await sendVerificationEmail(email, verificationToken);
+        sendVerificationEmail(email, verificationToken);
 
         const userData = await updateUserData(
           userId,
@@ -79,7 +78,7 @@ export const signupUser = async (
 
     const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
 
-    await sendVerificationEmail(email, verificationToken);
+    sendVerificationEmail(email, verificationToken);
 
     // sent data to database
     const userData = await createUser({
@@ -96,7 +95,7 @@ export const signupUser = async (
     return response(201, userData, 'Sucess create user', res);
   } catch (error) {
     console.log(error);
-    response(500, null, 'error when signup', res);
+    return response(500, null, 'error when signup', res);
   }
 };
 
