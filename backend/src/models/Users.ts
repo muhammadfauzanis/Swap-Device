@@ -20,8 +20,38 @@ export const findUserByPhoneNumber = async (phoneNumber: string) => {
   return user;
 };
 
+export const validateVerificationToken = async (verificationCode: string) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      verificationToken: verificationCode,
+    },
+  });
+
+  return user;
+};
+
 export const createUser = async (userData: any) => {
   const user = await prisma.user.create({ data: userData });
+
+  return user;
+};
+
+export const updateUserData = async (
+  userId: number,
+  isVerified: boolean,
+  verificationCode: null,
+  verificationCodeExpired: null
+) => {
+  const user = await prisma.user.update({
+    where: {
+      user_id: userId,
+    },
+    data: {
+      isVerified: isVerified,
+      verificationToken: verificationCode,
+      verificationTokenExpired: verificationCodeExpired,
+    },
+  });
 
   return user;
 };

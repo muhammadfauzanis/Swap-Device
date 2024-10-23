@@ -1,5 +1,5 @@
 import express from 'express';
-import { signupUser } from '../controllers/user';
+import { signupUser, verifyUserAccount } from '../controllers/user';
 import { body } from 'express-validator';
 
 const router = express.Router();
@@ -11,8 +11,12 @@ router.post(
     body('password')
       .isLength({ min: 8 })
       .withMessage('Password minimal 8 karakter'),
+    body('phoneNumber')
+      .isMobilePhone('id-ID')
+      .withMessage('Nomor HP tidak valid'),
   ],
   signupUser
 );
+router.post('/verify', verifyUserAccount);
 
 export default router;

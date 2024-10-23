@@ -21,8 +21,13 @@ model User{
   password      String?
   auth_provider AuthProvider @default(CREDENTIALS)
   balance       Int          @default(0)
+  isVerified    Boolean      @default(false)
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
+  verificationToken   String? 
+  resetPasswordToken  String?
+  verificationTokenExpired   DateTime?
+  resetPasswordTokenExpired  DateTime?
 }
 
 enum AuthProvider{
