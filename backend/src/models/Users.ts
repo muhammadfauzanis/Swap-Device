@@ -20,10 +20,10 @@ export const findUserByPhoneNumber = async (phoneNumber: string) => {
   return user;
 };
 
-export const validateVerificationToken = async (verificationCode: string) => {
+export const validateVerificationToken = async (verificationToken: string) => {
   const user = await prisma.user.findFirst({
     where: {
-      verificationToken: verificationCode,
+      verificationToken: verificationToken,
     },
   });
 
@@ -39,8 +39,8 @@ export const createUser = async (userData: any) => {
 export const updateUserData = async (
   userId: number,
   isVerified: boolean,
-  verificationCode: null,
-  verificationCodeExpired: null
+  verificationToken: string | null,
+  verificationTokenExpired: Date | null
 ) => {
   const user = await prisma.user.update({
     where: {
@@ -48,8 +48,8 @@ export const updateUserData = async (
     },
     data: {
       isVerified: isVerified,
-      verificationToken: verificationCode,
-      verificationTokenExpired: verificationCodeExpired,
+      verificationToken: verificationToken,
+      verificationTokenExpired: verificationTokenExpired,
     },
   });
 

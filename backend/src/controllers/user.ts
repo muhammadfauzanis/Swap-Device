@@ -37,6 +37,27 @@ export const signupUser = async (
     const userEmail = await findUserByEmail(email);
     const userPhoneNumber = await findUserByPhoneNumber(phoneNumber);
 
+    // Check if user has already register before but not verified allow them to click register again and just send verifcode
+    if (userEmail?.isVerified === false) {
+      const userId = userEmail.user_id;
+      const verificationToken = Math.floor(
+        100000 + Math.random() * 900000
+      ).toString();
+
+      const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
+
+      const userData = await updateUserData(
+        userId,
+        false,
+        verificationToken,
+        verificationTokenExpired
+      );
+
+      return response(200, userData, 'Verification code has been sent', res);
+    }
+
+    console.log(userEmail?.isVerified);
+
     if (userEmail || userPhoneNumber) {
       return response(400, null, 'User already exist', res);
     }
@@ -53,8 +74,8 @@ export const signupUser = async (
     const verificationToken = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
+
     const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
-    console.log(verificationTokenExpired);
 
     // sent data to database
     const userData = await createUser({
@@ -83,6 +104,7 @@ export const verifyUserAccount = async (
     const { verificationToken } = req.body;
 
     const user = await validateVerificationToken(verificationToken);
+    console.log(user);
 
     if (user?.isVerified === true) {
       return response(400, null, 'Account has already verified', res);
