@@ -11,6 +11,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
+import { sendVerificationEmail } from '../helper/sentEmail';
 
 export const signupUser = async (
   req: express.Request,
@@ -37,28 +38,29 @@ export const signupUser = async (
     const userEmail = await findUserByEmail(email);
     const userPhoneNumber = await findUserByPhoneNumber(phoneNumber);
 
-    // Check if user has already register before but not verified allow them to click register again and just send verifcode
-    if (userEmail?.isVerified === false) {
-      const userId = userEmail.user_id;
-      const verificationToken = Math.floor(
-        100000 + Math.random() * 900000
-      ).toString();
-
-      const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
-
-      const userData = await updateUserData(
-        userId,
-        false,
-        verificationToken,
-        verificationTokenExpired
-      );
-
-      return response(200, userData, 'Verification code has been sent', res);
-    }
-
-    console.log(userEmail?.isVerified);
-
     if (userEmail || userPhoneNumber) {
+      // Check if user has already register before but not verified allow them to click register again and just send verifcode
+      if (userEmail?.isVerified === false) {
+        const userId = userEmail.user_id;
+        const verificationToken = Math.floor(
+          100000 + Math.random() * 900000
+        ).toString();
+
+        const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
+
+        await sendVerificationEmail(email, verificationToken);
+
+        const userData = await updateUserData(
+          userId,
+          false, // isVerified
+          verificationToken,
+          verificationTokenExpired
+        );
+
+        return response(200, userData, 'Verification code has been sent', res);
+      }
+
+      // if user has existed and verified
       return response(400, null, 'User already exist', res);
     }
 
@@ -77,6 +79,8 @@ export const signupUser = async (
 
     const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
 
+    await sendVerificationEmail(email, verificationToken);
+
     // sent data to database
     const userData = await createUser({
       name,
@@ -89,7 +93,7 @@ export const signupUser = async (
 
     generateTokenAndSetCookie(userData.user_id, res);
 
-    response(201, userData, 'Sucess create user', res);
+    return response(201, userData, 'Sucess create user', res);
   } catch (error) {
     console.log(error);
     response(500, null, 'error when signup', res);
@@ -104,7 +108,6 @@ export const verifyUserAccount = async (
     const { verificationToken } = req.body;
 
     const user = await validateVerificationToken(verificationToken);
-    console.log(user);
 
     if (user?.isVerified === true) {
       return response(400, null, 'Account has already verified', res);
