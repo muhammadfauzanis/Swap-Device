@@ -7,11 +7,7 @@ const router = express.Router();
 router.post(
   '/signup',
   [
-    body('email')
-      .isEmail()
-      .withMessage('Email tidak valid')
-      .notEmpty()
-      .withMessage('Email tidak boleh kosong'),
+    body('email').isEmail().withMessage('Email tidak valid'),
     body('password')
       .isLength({ min: 8 })
       .withMessage('Password minimal 8 karakter'),

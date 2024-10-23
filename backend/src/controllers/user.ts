@@ -16,8 +16,12 @@ export const signupUser = async (
   try {
     const { name, email, phoneNumber, password, repassword } = req.body;
 
-    const errors = validationResult(req);
+    if (!name || !email || !phoneNumber || !password || !repassword) {
+      return response(400, null, 'All fields are required', res);
+    }
 
+    // Get errors from request body (check valid email and password length)
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errorMessage = errors
         .array()
