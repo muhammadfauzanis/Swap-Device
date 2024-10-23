@@ -6,6 +6,8 @@ import {
 import response from '../response';
 import express from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { validationResult } from 'express-validator';
 
 export const signupUser = async (
   req: express.Request,
@@ -14,17 +16,27 @@ export const signupUser = async (
   try {
     const { name, email, phoneNumber, password, repassword } = req.body;
 
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const errorMessage = errors
+        .array()
+        .map((error) => error.msg)
+        .join(' & ');
+      return response(400, null, errorMessage, res);
+    }
+
     // check user was exist or not
     const userEmail = await findUserByEmail(email);
     const userPhoneNumber = await findUserByPhoneNumber(phoneNumber);
 
     if (userEmail || userPhoneNumber) {
-      return response(400, 'invalid', 'User already exist', res);
+      return response(400, null, 'User already exist', res);
     }
 
     // validated password and repassword are same or not
     if (password !== repassword) {
-      return response(400, 'invalid', `Password doesn't match`, res);
+      return response(400, null, `Password doesn't match`, res);
     }
 
     // encrypt password with bcrypt
@@ -32,18 +44,18 @@ export const signupUser = async (
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // sent data to database
-    const newUser = {
+    const userData = {
       name,
       email,
       phone_number: phoneNumber,
       password: hashedPassword,
     };
 
-    await createUser(newUser);
+    await createUser(userData);
 
-    response(201, newUser, 'Sucess create user', res);
+    response(201, userData, 'Sucess create user', res);
   } catch (error) {
     console.log(error);
-    response(500, 'invalid', 'error when signup', res);
+    response(500, null, 'error when signup', res);
   }
 };
