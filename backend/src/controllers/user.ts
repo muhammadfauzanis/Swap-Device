@@ -145,6 +145,7 @@ export const loginUser = async (
       return response(400, null, 'Email and password fiedls are required', res);
     }
 
+    // find user on database
     const user = await findUserByEmail(email);
 
     // check user account has verified or not
@@ -186,5 +187,18 @@ export const loginUser = async (
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error when user login', res);
+  }
+};
+
+export const logoutUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    res.clearCookie('token');
+    return response(200, null, 'Logout successfull', res);
+  } catch (error) {
+    console.log(error);
+    return response(500, null, 'Error when logout user', res);
   }
 };
