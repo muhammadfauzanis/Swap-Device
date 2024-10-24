@@ -146,6 +146,17 @@ export const loginUser = async (
       return response(400, null, 'Email and password fiedls are required', res);
     }
 
+    // Get errors from request body (email and password)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const errorMessage = errors
+        .array()
+        .map((message) => message.msg)
+        .join(' & ');
+
+      return response(400, null, errorMessage, res);
+    }
+
     // find user on database
     const user = await findUserByEmail(email);
 
