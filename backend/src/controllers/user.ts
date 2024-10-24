@@ -38,7 +38,7 @@ export const signupUser = async (
     const userEmail = await findUserByEmail(email);
     const userPhoneNumber = await findUserByPhoneNumber(phoneNumber);
 
-    if (userEmail || userPhoneNumber) {
+    if (userEmail) {
       // Check if user has already register before but not verified allow them to click register again and just send verifcode
       if (userEmail?.isVerified === false) {
         const userId = userEmail.user_id;
@@ -61,7 +61,16 @@ export const signupUser = async (
       }
 
       // if user has existed and verified
-      return response(400, null, 'User already exist', res);
+      return response(400, null, 'User already exist, please login', res);
+    }
+
+    if (userPhoneNumber) {
+      return response(
+        400,
+        null,
+        'Your phone number is registered on another account.',
+        res
+      );
     }
 
     // validated password and repassword are same or not
