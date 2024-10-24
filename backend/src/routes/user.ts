@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  forgotPassword,
   getDetailUser,
   loginUser,
   logoutUser,
@@ -34,5 +35,10 @@ router.post(
 );
 router.post('/logout', logoutUser);
 router.get('/user-detail/:userId', getDetailUser);
+router.post(
+  '/forgot-password',
+  body('email').isEmail().withMessage('Email tidak valid'),
+  forgotPassword
+);
 
 export default router;

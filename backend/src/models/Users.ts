@@ -65,3 +65,21 @@ export const updateUserData = async (
 
   return user;
 };
+
+export const updateResetPasswordToken = async (
+  userId: number,
+  resetPasswordToken: string | null,
+  resetPasswordTokenExpired: Date | null
+) => {
+  const user = await prisma.user.update({
+    where: {
+      user_id: userId,
+    },
+    data: {
+      resetPasswordToken: resetPasswordToken,
+      resetPasswordTokenExpired: resetPasswordTokenExpired,
+    },
+  });
+
+  return user;
+};

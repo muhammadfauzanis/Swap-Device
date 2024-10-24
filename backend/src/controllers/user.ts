@@ -3,6 +3,7 @@ import {
   findUserByEmail,
   findUserById,
   findUserByPhoneNumber,
+  updateResetPasswordToken,
   updateUserData,
   validateVerificationToken,
 } from '../models/Users';
@@ -12,6 +13,7 @@ import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
 import { sendVerificationEmail } from '../helper/sentEmail';
+import crypto from 'crypto';
 
 export const signupUser = async (
   req: express.Request,
@@ -263,5 +265,56 @@ export const getDetailUser = async (
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error when get detail user', res);
+  }
+};
+
+export const forgotPassword = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return response(400, null, 'Email is required.', res);
+    }
+
+    // get error message from request body (email format)
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      const errorMessage = error.array()[0].msg;
+
+      return response(400, null, errorMessage, res);
+    }
+
+    const user = await findUserByEmail(email);
+    if (!user) {
+      return response(400, null, 'User not found', res);
+    }
+
+    // Generate reset token
+    const resetPasswordToken = crypto.randomBytes(20).toString('hex');
+    const resetPasswordTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
+
+    const userTokenData = {
+      resetPasswordToken,
+      resetPasswordTokenExpired,
+    };
+
+    await updateResetPasswordToken(
+      user.user_id,
+      resetPasswordToken,
+      resetPasswordTokenExpired
+    );
+
+    return response(
+      200,
+      userTokenData,
+      'Reset password link has been sent to your email',
+      res
+    );
+  } catch (error) {
+    console.log(error);
+    return response(500, null, 'error when user reset password', res);
   }
 };
