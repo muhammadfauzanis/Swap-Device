@@ -132,3 +132,59 @@ export const verifyUserAccount = async (
     return response(500, null, 'error when verify user account', res);
   }
 };
+
+export const loginUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { email, password } = req.body;
+
+    // check all fields are fill or not
+    if (!email || !password) {
+      return response(400, null, 'Email and password fiedls are required', res);
+    }
+
+    const user = await findUserByEmail(email);
+
+    // check user account has verified or not
+    if (user?.isVerified === false) {
+      return response(
+        400,
+        null,
+        `Your account hasn't been verified. Please check your email to verify your account.`,
+        res
+      );
+    }
+
+    // check user exist or not
+    if (!user || !user.password) {
+      return response(
+        404,
+        null,
+        'User not found, please create an account.',
+        res
+      );
+    }
+
+    // compare password with user password in database
+    const isPasswordValid = await bcrypt.compare(password, user?.password);
+    if (!isPasswordValid) {
+      return response(400, null, 'Invalid email and password.', res);
+    }
+
+    // Generate token for user
+    const token = generateTokenAndSetCookie(user?.user_id, res);
+
+    const userData = {
+      token,
+      userId: user.user_id,
+      email: user.email,
+    };
+
+    return response(200, userData, 'Login success', res);
+  } catch (error) {
+    console.log(error);
+    return response(500, null, 'Error when user login', res);
+  }
+};
