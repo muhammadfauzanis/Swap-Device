@@ -12,7 +12,10 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
-import { sendVerificationEmail } from '../helper/sentEmail';
+import {
+  sendResetPasswordLink,
+  sendVerificationEmail,
+} from '../helper/sentEmail';
 import crypto from 'crypto';
 
 export const signupUser = async (
@@ -306,6 +309,9 @@ export const forgotPassword = async (
       resetPasswordToken,
       resetPasswordTokenExpired
     );
+
+    const resetPasswordURL = `${process.env.CLIENT_URL}/reset-password/${resetPasswordToken}`;
+    sendResetPasswordLink(user.email, resetPasswordURL);
 
     return response(
       200,
