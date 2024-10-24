@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  getDetailUser,
   loginUser,
   logoutUser,
   signupUser,
@@ -32,5 +33,6 @@ router.post(
   loginUser
 );
 router.post('/logout', logoutUser);
+router.get('/user-detail/:userId', getDetailUser);
 
 export default router;

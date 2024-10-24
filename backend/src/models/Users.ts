@@ -20,6 +20,16 @@ export const findUserByPhoneNumber = async (phoneNumber: string) => {
   return user;
 };
 
+export const findUserById = async (userId: number) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  return user;
+};
+
 export const validateVerificationToken = async (verificationToken: string) => {
   const user = await prisma.user.findFirst({
     where: {
