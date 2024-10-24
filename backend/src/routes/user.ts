@@ -1,5 +1,10 @@
 import express from 'express';
-import { loginUser, signupUser, verifyUserAccount } from '../controllers/user';
+import {
+  loginUser,
+  logoutUser,
+  signupUser,
+  verifyUserAccount,
+} from '../controllers/user';
 import { body } from 'express-validator';
 
 const router = express.Router();
@@ -26,5 +31,6 @@ router.post(
     .withMessage('Password minimal 8 karakter'),
   loginUser
 );
+router.post('/logout', logoutUser);
 
 export default router;
