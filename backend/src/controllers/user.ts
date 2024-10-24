@@ -166,6 +166,12 @@ export const loginUser = async (
       return response(400, null, errorMessage, res);
     }
 
+    // check if user has token but login again
+    const checkToken = req.cookies.token;
+    if (checkToken) {
+      return response(400, null, 'You have logged in', res);
+    }
+
     // find user on database
     const user = await findUserByEmail(email);
 
@@ -192,7 +198,7 @@ export const loginUser = async (
     // compare password with user password in database
     const isPasswordValid = await bcrypt.compare(password, user?.password);
     if (!isPasswordValid) {
-      return response(400, null, 'Invalid email and password.', res);
+      return response(400, null, 'Invalid email or password.', res);
     }
 
     // Generate token for user
