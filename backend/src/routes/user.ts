@@ -4,6 +4,7 @@ import {
   getDetailUser,
   loginUser,
   logoutUser,
+  resetPassword,
   signupUser,
   verifyUserAccount,
 } from '../controllers/user';
@@ -39,6 +40,13 @@ router.post(
   '/forgot-password',
   body('email').isEmail().withMessage('Email tidak valid'),
   forgotPassword
+);
+router.post(
+  '/reset-password/:resetPasswordToken',
+  body('password')
+    .isLength({ min: 8 })
+    .withMessage('Password minimal 8 karakter'),
+  resetPassword
 );
 
 export default router;

@@ -1,8 +1,10 @@
 import {
   createUser,
+  findResetPasswordTokenUser,
   findUserByEmail,
   findUserById,
   findUserByPhoneNumber,
+  updatePassword,
   updateResetPasswordToken,
   updateUserData,
   validateVerificationToken,
@@ -322,5 +324,63 @@ export const forgotPassword = async (
   } catch (error) {
     console.log(error);
     return response(500, null, 'error when user reset password', res);
+  }
+};
+
+export const resetPassword = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { resetPasswordToken } = req.params;
+    const { password, rePassword } = req.body;
+
+    // Get error from req validate password length
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      const errorMessage = error.array()[0].msg;
+
+      return response(400, null, errorMessage, res);
+    }
+
+    if (!password || !rePassword) {
+      return response(400, null, 'All fields are required', res);
+    }
+
+    // find user from reset password token
+    const user = await findResetPasswordTokenUser(resetPasswordToken);
+
+    if (!user) {
+      return response(400, null, 'Invalid link, user not found', res);
+    }
+
+    const currentTime = Date.now();
+    if (
+      user.resetPasswordTokenExpired &&
+      user.resetPasswordTokenExpired.getTime() < currentTime
+    ) {
+      return response(
+        400,
+        null,
+        'Your link had expire, please make request again',
+        res
+      );
+    }
+
+    if (password !== rePassword) {
+      return response(400, null, `Password doesn't match`, res);
+    }
+
+    // ecrypt password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await updatePassword(user.user_id, hashedPassword);
+    await updateResetPasswordToken(user.user_id, null, null);
+
+    return response(400, user, 'Success reset password', res);
+  } catch (error) {
+    console.log(error);
+    return response(500, null, 'Error when user change password', res);
   }
 };

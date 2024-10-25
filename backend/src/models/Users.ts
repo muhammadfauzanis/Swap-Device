@@ -30,6 +30,16 @@ export const findUserById = async (userId: number) => {
   return user;
 };
 
+export const findResetPasswordTokenUser = async (token: string) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      resetPasswordToken: token,
+    },
+  });
+
+  return user;
+};
+
 export const validateVerificationToken = async (verificationToken: string) => {
   const user = await prisma.user.findFirst({
     where: {
@@ -78,6 +88,19 @@ export const updateResetPasswordToken = async (
     data: {
       resetPasswordToken: resetPasswordToken,
       resetPasswordTokenExpired: resetPasswordTokenExpired,
+    },
+  });
+
+  return user;
+};
+
+export const updatePassword = async (userId: number, newPassword: string) => {
+  const user = await prisma.user.update({
+    where: {
+      user_id: userId,
+    },
+    data: {
+      password: newPassword,
     },
   });
 
