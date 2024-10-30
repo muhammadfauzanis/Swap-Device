@@ -1,4 +1,3 @@
-import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,8 +15,6 @@ import { FcGoogle } from 'react-icons/fc';
 const ForgotPasswordPage = () => {
   return (
     <div className="w-full h-screen flex flex-col">
-      <Navbar />
-
       <div className="flex flex-1 justify-center items-center h-screen">
         <div className="max-w-lg w-full h-auto p-5 md:p-0">
           <Card className=" shadow-lg">

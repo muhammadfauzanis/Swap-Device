@@ -1,11 +1,8 @@
-import Navbar from '@/components/Navbar';
 import SideBarUser from '@/components/SideBarUser';
 
 const UserPage = () => {
   return (
     <div className="w-full min-h-screen">
-      <Navbar />
-
       <div className="mt-32 flex w-[70%] m-auto">
         <SideBarUser />
 

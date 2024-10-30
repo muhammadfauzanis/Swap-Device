@@ -3,7 +3,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import DetailProductCarousel from '@/components/DetailProductCarousel';
 import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import Faq from '@/components/Faq';
 import { Button } from '@/components/ui/button';
@@ -16,8 +15,6 @@ const DetailProductPage = () => {
 
   return (
     <div className="w-full min-h-screen">
-      <Navbar />
-
       <div className="grid grid-cols-1 md:grid-cols-2 items-start w-[90%] gap-x-16 xl:gap-x-0 m-auto mt-40 px-8 md:px-3 lg:px-0">
         <DetailProductCarousel>
           <Card>

@@ -1,6 +1,5 @@
 import CheckoutInformation from '@/components/CheckoutInformation';
 import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,8 +8,6 @@ import { IoLocationSharp } from 'react-icons/io5';
 const CheckoutPage = () => {
   return (
     <div className="w-full max-h-screen">
-      <Navbar />
-
       <div className="mt-32 grid grid-cols-1 md:grid-cols-2 items-center w-[80%] xl:w-[70%] m-auto gap-x-10 gap-y-5 md:gap-y-0">
         <Card>
           <CardContent className="flex items-center justify-center p-6 ">

@@ -1,13 +1,10 @@
 import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import SortingProductBox from '@/components/SortingProductBox';
 
 const WishlistPage = () => {
   return (
     <div className="w-full max-h-screen">
-      <Navbar />
-
       <div className="mt-32 w-[80%] m-auto ">
         <h3 className="font-bold text-2xl lg:text-3xl">Semua Wishlist</h3>
 
