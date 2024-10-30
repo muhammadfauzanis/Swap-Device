@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import apiDocumentation from './apiDocs.json';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user';
@@ -8,6 +10,9 @@ import userRoutes from './routes/user';
 dotenv.config();
 
 const app = express();
+
+// API Documentation with Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocumentation));
 
 app.use(cors());
 app.use(bodyParser.json());
