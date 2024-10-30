@@ -17,7 +17,6 @@
       "description": "Data about users"
     }
   ],
-
   "paths": {
     "/auth/signup": {
       "post": {
@@ -32,26 +31,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "John Doe"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "johndoe@example.com"
-                  },
-                  "phoneNumber": {
-                    "type": "string",
-                    "example": "+123456789"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "password123"
-                  },
-                  "repassword": {
-                    "type": "string",
-                    "example": "password123"
-                  }
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "phoneNumber": { "type": "string" },
+                  "password": { "type": "string" },
+                  "repassword": { "type": "string" }
                 },
                 "required": [
                   "name",
@@ -72,26 +56,135 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 201
-                    },
+                    "status": { "type": "integer", "example": 201 },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "name": {
-                          "type": "string",
-                          "example": "John Doe"
-                        },
+                        "user_id": { "type": "integer", "example": 1 },
                         "email": {
                           "type": "string",
-                          "example": "johndoe@example.com"
+                          "example": "walterwhite@gmail.com"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "+62812345678"
+                        },
+                        "name": { "type": "string", "example": "walter white" },
+                        "password": {
+                          "type": "string",
+                          "example": "$2b$10$BLPzRPVkuwiEh3WPpodqE.wRa60tKliHyZ1pJ1ZV1VAQBwgcpTUZS"
+                        },
+                        "auth_provider": {
+                          "type": "string",
+                          "example": "CREDENTIALS"
+                        },
+                        "balance": { "type": "integer", "example": 0 },
+                        "isVerified": { "type": "boolean", "example": false },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-30T02:40:19.995Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-30T02:40:19.995Z"
+                        },
+                        "verificationToken": {
+                          "type": "string",
+                          "example": "123456"
+                        },
+                        "resetPasswordToken": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        },
+                        "verificationTokenExpired": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-30T02:45:19.977Z"
+                        },
+                        "resetPasswordTokenExpired": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
                         }
                       }
                     },
                     "message": {
                       "type": "string",
                       "example": "Success create user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "When user tries to register again but hasn't verified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "integer", "example": 200 },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": { "type": "integer", "example": 1 },
+                        "email": {
+                          "type": "string",
+                          "example": "walterwhite@gmail.com"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "+62812345678"
+                        },
+                        "name": { "type": "string", "example": "walter white" },
+                        "password": {
+                          "type": "string",
+                          "example": "$2b$10$BLPzRPVkuwiEh3WPpodqE.wRa60tKliHyZ1pJ1ZV1VAQBwgcpTUZS"
+                        },
+                        "auth_provider": {
+                          "type": "string",
+                          "example": "CREDENTIALS"
+                        },
+                        "balance": { "type": "integer", "example": 0 },
+                        "isVerified": { "type": "boolean", "example": false },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-30T02:40:19.995Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-30T02:40:19.995Z"
+                        },
+                        "verificationToken": {
+                          "type": "string",
+                          "example": "123456"
+                        },
+                        "resetPasswordToken": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        },
+                        "verificationTokenExpired": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-30T02:45:19.977Z"
+                        },
+                        "resetPasswordTokenExpired": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Verification code has been sent"
                     }
                   }
                 }
@@ -105,17 +198,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "data": {
-                      "type": "string",
-                      "example": "error"
-                    },
+                    "status": { "type": "integer", "example": 400 },
+                    "data": { "type": "string", "example": "error" },
                     "message": {
                       "type": "string",
-                      "example": "User already exist or Password doesn't match"
+                      "example": "User already exists or Password doesn't match"
                     }
                   }
                 }
@@ -129,18 +216,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 500
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Server error"
-                    }
+                    "status": { "type": "integer", "example": 500 },
+                    "data": { "type": "null", "example": null },
+                    "message": { "type": "string", "example": "Server error" }
                   }
                 }
               }
