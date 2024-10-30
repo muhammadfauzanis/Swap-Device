@@ -226,6 +226,750 @@
           }
         }
       }
+    },
+    "/auth/verify": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Verify User Account",
+        "description": "This API verifies the user account using the provided verification token.",
+        "requestBody": {
+          "description": "User verification data.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "verificationToken": { "type": "string" }
+                },
+                "required": ["verificationToken"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success verified account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "data": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success verified account"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid verification code or expired code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "null"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Incorrect verification code! || Account has already been verified || Verification code has expired"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User Login",
+        "description": "This API handles login",
+        "requestBody": {
+          "description": "User object that needs to be added",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "jwt.token.here"
+                        },
+                        "userId": {
+                          "type": "integer",
+                          "example": "1"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "walterwhite@gmail.com"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login Success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email or password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid email or password || Your account hasn't been verified. Please check your email to verify your account. || Email tidak valid atau Password minimal 8 karakter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Can't find user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found, please create an account."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User logout",
+        "description": "This API handles logout",
+        "responses": {
+          "200": {
+            "description": "Successful logout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logout successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error when logout"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/user-detail/{userId}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get User Details",
+        "description": "Retrieves detailed information about a specific user.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the user to retrieve."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer",
+                          "example": 12
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "walterwhite@gmail.com"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "+62812345678"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "walter white"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "random string"
+                        },
+                        "auth_provider": {
+                          "type": "string",
+                          "example": "CREDENTIALS"
+                        },
+                        "balance": {
+                          "type": "integer",
+                          "example": 0
+                        },
+                        "isVerified": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-24T02:34:19.314Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-25T03:04:07.211Z"
+                        },
+                        "verificationToken": {
+                          "type": "string",
+                          "example": null
+                        },
+                        "resetPasswordToken": {
+                          "type": "string",
+                          "example": null
+                        },
+                        "verificationTokenExpired": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": null
+                        },
+                        "resetPasswordTokenExpired": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": null
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success retrieved detail user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user ID or missing token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User ID is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request due to missing session token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You don't have a session token, please login."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error occurred while retrieving user details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error when getting user details"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Forgot Password",
+        "description": "Sends a reset password link to the user's email if the email is registered.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's registered email address",
+                    "example": "user@example.com"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reset password link sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "resetPasswordToken": {
+                          "type": "string",
+                          "example": "randomGeneratedToken123"
+                        },
+                        "resetPasswordTokenExpired": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-25T03:04:07.211Z"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reset password link has been sent to your email"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email is required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error when user reset password"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password/{resetPasswordToken}": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Reset Password",
+        "description": "Resets the user's password using the token provided in the password reset email.",
+        "parameters": [
+          {
+            "name": "resetPasswordToken",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token received in the password reset email"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "New password for the user",
+                    "example": "newPassword123"
+                  },
+                  "rePassword": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "Re-enter the new password",
+                    "example": "newPassword123"
+                  }
+                },
+                "required": ["password", "rePassword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer",
+                          "example": 12
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success reset password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password doesn't match"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Link expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 410
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Your link had expired, please request a new one"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error when user change password"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
