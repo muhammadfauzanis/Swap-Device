@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { CiHeart, CiSearch } from 'react-icons/ci';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { IoMdClose } from 'react-icons/io';
 import { Button } from './ui/button';
 import Link from 'next/link';
 
 const Navbar = () => {
-  const [show, setShow] = useState(false);
   const [header, setHeader] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const scrollHeader = () => {
     if (window.scrollY >= 20) {
@@ -26,10 +27,25 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    // Clean up on unmount
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [isOpen]);
+
   return (
     <nav
-      className={`flex fixed -top-3 justify-between items-center m-auto my-3 w-full px-8 md:px-10 lg:px-20 xl:px-28 py-3 transition-all duration-300 ${
-        header ? '-top-3 left-0 bg-white z-50 shadow-md' : ''
+      className={`flex fixed top-0 justify-between items-center m-auto w-full px-8 md:px-10 lg:px-20 xl:px-28 py-3 transition-all ${
+        isOpen ? 'duration-0' : 'duration-50'
+      } ${header ? 'bg-white shadow-md z-50' : ''} ${
+        isOpen ? 'left-0 z-40' : ''
       }`}
     >
       <Link href="/" className="text-xl font-bold italic cursor-pointer">
@@ -56,10 +72,10 @@ const Navbar = () => {
         </ul>
       </div>
 
-      <div className="flex items-center gap-x-4 cursor-pointer">
+      <div className="flex items-center gap-x-2 md:gap-x-4 cursor-pointer">
         <CiSearch
           size={25}
-          className="hover:text-gray-300 transition-all duration-300"
+          className="hover:text-gray-300 transition-all duration-300 mr-1"
         />
         <Link href="/wishlist">
           <CiHeart
@@ -67,21 +83,43 @@ const Navbar = () => {
             className="hover:text-gray-300 transition-all duration-300"
           />
         </Link>
-        {/* <div className="bg-black  rounded-full hover:bg-gray-100 transition-all duration-300 hidden sm:hidden md:block">
-          <h3 className="text-white py-2 px-5 text-md hover:text-black transition-all duration-300">
-            Login
-          </h3>
-        </div> */}
+
         <Link href="/login">
           <Button className="hidden sm:hidden md:block">Login</Button>
         </Link>
 
-        <RxHamburgerMenu
-          size={20}
-          className="block sm:block md:hidden hover:text-gray-300 transition-all duration-300"
-          onClick={() => setShow(true)}
-        />
+        {!isOpen ? (
+          <RxHamburgerMenu
+            size={25}
+            className="block sm:block md:hidden hover:text-gray-300 transition-all duration-500"
+            onClick={() => setIsOpen(true)}
+          />
+        ) : (
+          <IoMdClose
+            size={25}
+            className="block sm:block md:hidden hover:text-gray-300 transition-all duration-500 z-50"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
       </div>
+
+      {isOpen && (
+        <div
+          className={`absolute w-full h-screen inset-0 md:hidden mt-10 bg-white flex flex-col items-center justify-center transition-all duration-300 ${
+            isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+          }`}
+        >
+          <ul className="flex flex-col items-center gap-y-8 text-2xl cursor-pointer">
+            <li>iPhone</li>
+            <li>iPad</li>
+            <li>Mac</li>
+            <li>AirPods</li>
+          </ul>
+          <Link href="/login">
+            <Button className="mt-8 text-xl p-5">Login</Button>
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };
