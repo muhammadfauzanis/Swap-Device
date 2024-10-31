@@ -35,6 +35,7 @@ const DetailProductPage = () => {
 
           <p className="text-sm text-gray-400">Code</p>
           <p className="font-bold text-lg lg:text-xl">IDR 17.000.000</p>
+          <p className="">Tersedia ✅</p>
 
           <p className="font-bold">
             Lokasi: <span className="font-normal">Bandung</span>
@@ -46,6 +47,15 @@ const DetailProductPage = () => {
 
           <p className="font-bold">
             Warna: <span className="font-normal">Natural Titanium</span>
+          </p>
+
+          <p className="font-bold">
+            Regional Code: <span className="font-normal">PA/A</span>
+          </p>
+
+          <p className="font-bold">
+            Garansi:{' '}
+            <span className="font-normal">Aktif s/d 18 Agustus 2025</span>
           </p>
 
           <div className="">
