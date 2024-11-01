@@ -23,17 +23,27 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const forgotPasswordFormSchema = z.object({
-  email: z.string().email('Masukkan email yang valid'),
-});
+const resetPasswordFormSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, 'Kata sandi minimal 8 karakter')
+      .max(20, 'Kata sandi maksimal 20 karakter'),
+    repassword: z.string(),
+  })
+  .refine((data) => data.password === data.repassword, {
+    message: 'Kata sandi konfirmasi tidak cocok dengan kata sandi anda',
+    path: ['repassword'],
+  });
 
-type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>;
+type ResetPasswordFormSchema = z.infer<typeof resetPasswordFormSchema>;
 
-const ForgotPasswordPage = () => {
-  const form = useForm<ForgotPasswordFormSchema>({
-    resolver: zodResolver(forgotPasswordFormSchema),
+const ResetPasswordPage = () => {
+  const form = useForm<ResetPasswordFormSchema>({
+    resolver: zodResolver(resetPasswordFormSchema),
     defaultValues: {
-      email: '',
+      password: '',
+      repassword: '',
     },
   });
 
@@ -51,23 +61,44 @@ const ForgotPasswordPage = () => {
         <div className="max-w-lg w-full h-auto p-5 md:p-0">
           <Card className=" shadow-lg">
             <CardHeader>
-              <CardTitle>Lupa Sandi</CardTitle>
+              <CardTitle>Atur Ulang Kata Sandi</CardTitle>
               <CardDescription>
-                Silahkan masukkan alamat email di bawah. Anda akan menerima link
-                untuk mengganti password anda.
+                Silahkan masukkan kata sandi baru anda.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form onSubmit={onSubmit} className="px-3">
+                <form onSubmit={onSubmit} className="px-3 space-y-3">
                   <FormField
                     control={control}
-                    name="email"
+                    name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="px-1">Email</FormLabel>
+                        <FormLabel className="px-1">Kata Sandi</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Email" />
+                          <Input
+                            {...field}
+                            placeholder="Kata Sandi"
+                            type="password"
+                          />
+                        </FormControl>
+                        <FormMessage className="px-1" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={control}
+                    name="repassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="px-1">Ulang Kata Sandi</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Ulang Kata Sandi"
+                            type="password"
+                          />
                         </FormControl>
                         <FormMessage className="px-1" />
                       </FormItem>
@@ -106,4 +137,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ResetPasswordPage;
