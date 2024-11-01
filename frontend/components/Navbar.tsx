@@ -19,6 +19,14 @@ const Navbar = () => {
     }
   };
 
+  const categories = [
+    { name: 'iPhone', link: '/' },
+    { name: 'iPad', link: '/' },
+    { name: 'Mac', link: '/' },
+    { name: 'Watch', link: '/' },
+    { name: 'Airpods', link: '/' },
+  ];
+
   useEffect(() => {
     window.addEventListener('scroll', scrollHeader);
 
@@ -54,21 +62,11 @@ const Navbar = () => {
 
       <div className="bg-gray-100 p-3 lg:px-5 rounded-full hidden sm:hidden md:block">
         <ul className="flex gap-x-5 lg:gap-x-9 mx-5 text-md cursor-pointer">
-          <li className="hover:font-bold transition ease-in-out duration-500">
-            iPhone
-          </li>
-          <li className="hover:font-bold transition ease-in-out duration-500">
-            iPad
-          </li>
-          <li className="hover:font-bold transition ease-in-out duration-500">
-            Mac
-          </li>
-          <li className="hover:font-bold transition ease-in-out duration-500">
-            Watch
-          </li>
-          <li className="hover:font-bold transition ease-in-out duration-500">
-            AirPods
-          </li>
+          {categories.map((category) => (
+            <li className="hover:font-bold transition ease-in-out duration-500">
+              <Link href={category.link}>{category.name}</Link>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -110,10 +108,11 @@ const Navbar = () => {
           }`}
         >
           <ul className="flex flex-col items-center gap-y-8 text-2xl cursor-pointer">
-            <li>iPhone</li>
-            <li>iPad</li>
-            <li>Mac</li>
-            <li>AirPods</li>
+            {categories.map((category) => (
+              <li className="hover:font-bold hover:underline transition ease-in-out duration-1000">
+                <Link href={category.link}>{category.name}</Link>
+              </li>
+            ))}
           </ul>
           <Link href="/login">
             <Button className="mt-8 text-xl p-5">Login</Button>
