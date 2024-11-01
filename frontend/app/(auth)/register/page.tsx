@@ -42,10 +42,7 @@ const registerFormSchema = z
       .string()
       .min(8, 'Kata sandi minimal 8 karakter')
       .max(20, 'Kata sandi maksimal 20 karakter'),
-    repassword: z
-      .string()
-      .min(8, 'Kata sandi minimal 8 karakter')
-      .max(20, 'Kata sandi maksimal 20 karakter'),
+    repassword: z.string(),
   })
   .refine((data) => data.password === data.repassword, {
     message: 'Kata sandi konfirmasi tidak cocok dengan kata sandi anda',
