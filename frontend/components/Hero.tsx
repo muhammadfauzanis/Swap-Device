@@ -10,7 +10,7 @@ const Hero = () => {
           <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold">
             Consignment Hub for your Apple Devices
           </h1>
-          <Button variant={'default'} className="mt-8">
+          <Button variant="default" className="mt-8">
             Shop Now
           </Button>
         </div>

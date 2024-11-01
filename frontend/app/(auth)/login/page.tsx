@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -7,12 +9,48 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { z } from 'zod';
 import { FcGoogle } from 'react-icons/fc';
 
+const loginFormSchema = z.object({
+  email: z.string().email('Masukkan email yang valid'),
+  password: z
+    .string()
+    .min(8, 'Kata sandi minimal 8 karakter')
+    .max(20, 'Kata sandi maksimal 20 karakter'),
+});
+
+type LoginFormSchema = z.infer<typeof loginFormSchema>;
+
 const LoginPage = () => {
+  const form = useForm<LoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const { handleSubmit, control, reset } = form;
+
+  const onSubmit = handleSubmit((values) => {
+    console.log(values);
+
+    reset();
+  });
+
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="flex flex-1 justify-center items-center h-screen">
@@ -28,38 +66,66 @@ const LoginPage = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-4 px-3">
-                  <div className="flex flex-col space-y-3">
-                    <Button
-                      variant={'outline'}
-                      className="w-full max-w-[70%] xl:w-[60%] m-auto flex justify-center items-center gap-x-5 shadow-md"
-                    >
-                      <FcGoogle size={20} />
-                      <p>Login With Google</p>
-                    </Button>
+              <Form {...form}>
+                <form onSubmit={onSubmit}>
+                  <div className="grid w-full items-center gap-4 px-3">
+                    <div className="flex flex-col space-y-3">
+                      <Button
+                        variant={'outline'}
+                        className="w-full max-w-[70%] xl:w-[60%] m-auto flex justify-center items-center gap-x-5 shadow-md"
+                      >
+                        <FcGoogle size={20} />
+                        <p>Login With Google</p>
+                      </Button>
 
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" placeholder="Email" />
+                      <FormField
+                        control={control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="px-1">Email</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="Email" />
+                            </FormControl>
+                            <FormMessage className="px-1" />
+                          </FormItem>
+                        )}
+                      />
 
-                    <Label htmlFor="password">Kata Sandi</Label>
-                    <Input id="password" placeholder="Kata Sandi" />
+                      <FormField
+                        control={control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="px-1">Password</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="Password" />
+                            </FormControl>
+                            <FormMessage className="px-1" />
+                          </FormItem>
+                        )}
+                      />
 
-                    <Link
-                      href={'/forgot-password'}
-                      className="font-bold text-black text-sm px-3"
-                    >
-                      Lupa sandi?
-                    </Link>
+                      <Link
+                        href={'/forgot-password'}
+                        className="font-bold text-black text-sm px-3"
+                      >
+                        Lupa sandi?
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </form>
+
+                  <CardFooter>
+                    <Button
+                      className="w-full max-w-[70%] xl:w-[60%] m-auto mt-4"
+                      type="submit"
+                    >
+                      Login
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Form>
             </CardContent>
-            <CardFooter>
-              <Button className="w-full max-w-[70%] xl:w-[60%] m-auto mt-3">
-                Login
-              </Button>
-            </CardFooter>
           </Card>
         </div>
       </div>

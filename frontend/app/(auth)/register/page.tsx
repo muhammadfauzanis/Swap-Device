@@ -23,9 +23,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-const loginFormSchema = z
+const registerFormSchema = z
   .object({
-    name: z.string().max(50, 'Nama maksimal 50 karakter'),
+    name: z
+      .string()
+      .min(1, 'Nama tidak boleh kosong')
+      .max(50, 'Nama maksimal 50 karakter'),
     email: z.string().email('Masukkan email yang valid'),
     phoneNumber: z
       .string()
@@ -49,11 +52,11 @@ const loginFormSchema = z
     path: ['repassword'],
   });
 
-type LoginFormSchema = z.infer<typeof loginFormSchema>;
+type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 const RegisterPage = () => {
-  const form = useForm<LoginFormSchema>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<RegisterFormSchema>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: '',
       email: '',
