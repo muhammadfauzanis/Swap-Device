@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -7,20 +9,64 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const loginFormSchema = z.object({
+  name: z.string().max(50, 'Nama maksimal 50 karakter'),
+  email: z.string().email('Masukkan email yang valid'),
+  phoneNumber: z
+    .string()
+    .min(6, 'Masukkan nomor telepon yang valid')
+    .max(15, 'Masukkan nomor telepon yang valid')
+    .regex(
+      /^(?:\+?[1-9][0-9]{0,2})?[08|09][0-9]{7,11}$/,
+      'Masukkan nomor telepon yang valid'
+    ),
+
+  password: z
+    .string()
+    .min(8, 'Password minimal 8 karakter')
+    .max(20, 'Password maksimal 20 karakter'),
+  repassword: z
+    .string()
+    .min(8, 'Password minimal 8 karakter')
+    .max(20, 'Password maksimal 20 karakter'),
+});
+
+type LoginFormSchema = z.infer<typeof loginFormSchema>;
 
 const RegisterPage = () => {
+  const form = useForm<LoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
+  });
+
+  const { handleSubmit, control } = form;
+
+  const onSubmit = (values: LoginFormSchema) => {
+    console.log(values);
+  };
+
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="flex flex-1 justify-center items-center h-screen">
         <div className="max-w-lg w-full h-auto p-5 md:p-0">
-          <Card className=" shadow-lg">
+          <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Register</CardTitle>
               <CardDescription>
-                <span className="pr-1">Belum memiliki akun?</span>
+                <span className="pr-1">Sudah memiliki akun?</span>
 
                 <Link href={'/login'} className="font-bold text-black">
                   Login di sini
@@ -28,35 +74,100 @@ const RegisterPage = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-4 px-3">
-                  <div className="flex flex-col space-y-3">
-                    <Label htmlFor="name">Nama</Label>
-                    <Input id="name" placeholder="Nama Anda" />
-
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" placeholder="Email" />
-
-                    <Label htmlFor="nomor">Nomor Telepon</Label>
-                    <Input id="nomor" placeholder="Nomor Telepon" />
-
-                    <Label htmlFor="password">Kata Sandi</Label>
-                    <Input id="password" placeholder="Kata Sandi" />
-
-                    <Label htmlFor="repassword">Ulang Kata Sandi</Label>
-                    <Input id="repassword" placeholder="Ulangi Kata Sandi" />
-                  </div>
-                </div>
-              </form>
+              <Form {...form}>
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="px-3 space-y-2"
+                >
+                  <FormField
+                    control={control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="px-1">Nama</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Nama Anda" />
+                        </FormControl>
+                        <FormMessage className="px-1" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="px-1">Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="email" placeholder="Email" />
+                        </FormControl>
+                        <FormMessage className="px-1" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="px-1">Nomor Telepon</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Nomor Telepon" />
+                        </FormControl>
+                        <FormMessage className="px-1" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="px-1">Kata Sandi</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="Kata Sandi"
+                          />
+                        </FormControl>
+                        <FormMessage className="px-1" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name="repassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="px-1">
+                          Ulangi Kata Sandi
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="Ulangi Kata Sandi"
+                          />
+                        </FormControl>
+                        <FormMessage className="px-1" />
+                      </FormItem>
+                    )}
+                  />
+                  <CardFooter className="flex flex-col">
+                    <Button
+                      className="w-full max-w-[70%] xl:w-[60%] m-auto my-3"
+                      type="submit"
+                    >
+                      Register
+                    </Button>
+                    <p className="text-xs text-gray-500">
+                      Your data will be protected and will not be shared
+                    </p>
+                  </CardFooter>
+                </form>
+              </Form>
             </CardContent>
-            <CardFooter className="flex flex-col">
-              <Button className="w-full max-w-[70%] xl:w-[60%] m-auto my-3">
-                Register
-              </Button>
-              <p className="text-xs text-gray-500">
-                Your data will be protected and will not be shared
-              </p>
-            </CardFooter>
           </Card>
         </div>
       </div>

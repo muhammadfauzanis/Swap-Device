@@ -63,7 +63,10 @@ const Navbar = () => {
       <div className="bg-gray-100 p-3 lg:px-5 rounded-full hidden sm:hidden md:block">
         <ul className="flex gap-x-5 lg:gap-x-9 mx-5 text-md cursor-pointer">
           {categories.map((category) => (
-            <li className="hover:font-bold transition ease-in-out duration-500">
+            <li
+              className="hover:font-bold transition ease-in-out duration-500"
+              key={category.name}
+            >
               <Link href={category.link}>{category.name}</Link>
             </li>
           ))}
@@ -103,18 +106,20 @@ const Navbar = () => {
 
       {isOpen && (
         <div
-          className={`absolute w-full h-screen inset-0 md:hidden mt-10 bg-white flex flex-col items-center justify-center transition-all duration-300 ${
+          className={`absolute w-full h-screen inset-0 md:hidden  bg-white flex flex-col items-center justify-center transition-all duration-300 ${
             isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
           }`}
         >
           <ul className="flex flex-col items-center gap-y-8 text-2xl cursor-pointer">
             {categories.map((category) => (
               <li className="hover:font-bold hover:underline transition ease-in-out duration-1000">
-                <Link href={category.link}>{category.name}</Link>
+                <Link href={category.link} onClick={() => setIsOpen(false)}>
+                  {category.name}
+                </Link>
               </li>
             ))}
           </ul>
-          <Link href="/login">
+          <Link href="/login" onClick={() => setIsOpen(false)}>
             <Button className="mt-8 text-xl p-5">Login</Button>
           </Link>
         </div>
