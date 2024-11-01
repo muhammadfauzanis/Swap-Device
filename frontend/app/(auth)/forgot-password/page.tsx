@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -7,12 +9,43 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { FcGoogle } from 'react-icons/fc';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const forgotPasswordFormSchema = z.object({
+  email: z.string().email('Masukkan email yang valid'),
+});
+
+type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>;
 
 const ForgotPasswordPage = () => {
+  const form = useForm<ForgotPasswordFormSchema>({
+    resolver: zodResolver(forgotPasswordFormSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const { handleSubmit, control, reset } = form;
+
+  const onSubmit = handleSubmit((value) => {
+    console.log(value);
+
+    reset();
+  });
+
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="flex flex-1 justify-center items-center h-screen">
@@ -26,31 +59,47 @@ const ForgotPasswordPage = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-4 px-3">
-                  <div className="flex flex-col space-y-3">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" placeholder="Email" />
-                  </div>
-                </div>
-              </form>
-            </CardContent>
-            <CardFooter className="flex flex-col gap-y-5">
-              <Button className="w-full max-w-[70%] xl:w-[60%] m-auto mt-3">
-                Kirim
-              </Button>
+              <Form {...form}>
+                <form onSubmit={onSubmit} className="px-3">
+                  <FormField
+                    control={control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="px-1">Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Email" />
+                        </FormControl>
+                        <FormMessage className="px-1" />
+                      </FormItem>
+                    )}
+                  />
 
-              <p className="text-sm">
-                Kembali ke{' '}
-                <Link href={'/login'} className="font-bold text-black ">
-                  Login
-                </Link>{' '}
-                atau{' '}
-                <Link href={'/register'} className="font-bold text-black ">
-                  Register
-                </Link>
-              </p>
-            </CardFooter>
+                  <CardFooter className="flex flex-col gap-y-5 mt-3">
+                    <Button
+                      className="w-full max-w-[70%] xl:w-[60%] m-auto mt-3"
+                      type="submit"
+                    >
+                      Kirim
+                    </Button>
+
+                    <p className="text-sm">
+                      Kembali ke{' '}
+                      <Link href={'/login'} className="font-bold text-black ">
+                        Login
+                      </Link>{' '}
+                      atau{' '}
+                      <Link
+                        href={'/register'}
+                        className="font-bold text-black "
+                      >
+                        Register
+                      </Link>
+                    </p>
+                  </CardFooter>
+                </form>
+              </Form>
+            </CardContent>
           </Card>
         </div>
       </div>
