@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 
 const registerFormSchema = z
   .object({
@@ -65,8 +66,34 @@ const RegisterPage = () => {
 
   const { handleSubmit, control, reset } = form;
 
+  // function to handle post request for signup user
+  const createUsers = async (data: RegisterFormSchema) => {
+    try {
+      const userData = {
+        name: data.name,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+        repassword: data.repassword,
+      };
+      const userResponse = await axios.post(
+        'http://localhost:5000/api/auth/signup',
+        userData
+      );
+
+      return userResponse;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error details:', error.response?.data);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+  };
+
   const onSubmit = handleSubmit((values) => {
-    console.log(values);
+    // call createUsers function and throw values
+    createUsers(values);
 
     reset();
   });
