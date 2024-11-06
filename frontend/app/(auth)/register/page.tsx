@@ -23,6 +23,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
 
 const registerFormSchema = z
   .object({
@@ -53,6 +56,8 @@ const registerFormSchema = z
 type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 const RegisterPage = () => {
+  const { toast } = useToast();
+
   const form = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -67,35 +72,31 @@ const RegisterPage = () => {
   const { handleSubmit, control, reset } = form;
 
   // function to handle post request for signup user
-  const createUsers = async (data: RegisterFormSchema) => {
+  const createUsers = async (userData: RegisterFormSchema) => {
     try {
-      const userData = {
-        name: data.name,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        password: data.password,
-        repassword: data.repassword,
-      };
       const userResponse = await axios.post(
         'http://localhost:5000/api/auth/signup',
         userData
       );
 
-      return userResponse;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Error details:', error.response?.data);
-      } else {
-        console.error('Unexpected error:', error);
+      if (userResponse.status === 201) {
+        console.log('Berhasil login');
+        reset();
       }
+    } catch (error: any) {
+      toast({
+        variant: 'default',
+        title: error.response.data.message,
+        className: 'text-red-500',
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      console.log(error.response);
     }
   };
 
   const onSubmit = handleSubmit((values) => {
     // call createUsers function and throw values
     createUsers(values);
-
-    reset();
   });
 
   return (
@@ -198,6 +199,7 @@ const RegisterPage = () => {
                     >
                       Register
                     </Button>
+
                     <p className="text-xs text-gray-500">
                       Your data will be protected and will not be shared
                     </p>
