@@ -22,7 +22,6 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
@@ -58,6 +57,7 @@ type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 const RegisterPage = () => {
   const { toast } = useToast();
+  const [isRegistered, setisRegistered] = useState(false);
 
   const form = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
@@ -79,6 +79,7 @@ const RegisterPage = () => {
 
       if (userResponse.status === 201) {
         console.log('Berhasil login');
+        setisRegistered(true);
         reset();
       }
     } catch (error: any) {
