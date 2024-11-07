@@ -76,7 +76,7 @@ const RegisterPage = () => {
   const { handleSubmit, control, reset } = form;
 
   // function to handle post request for signup user
-  const createUsers = async (userData: RegisterFormSchema) => {
+  const createUser = async (userData: RegisterFormSchema) => {
     SetIsLoading(true);
     setTimeout(async () => {
       try {
@@ -100,8 +100,8 @@ const RegisterPage = () => {
   };
 
   const onSubmit = handleSubmit((values) => {
-    // call createUsers function and throw values
-    createUsers(values);
+    // call createUser function and throw values
+    createUser(values);
     setEmail(values.email);
   });
 

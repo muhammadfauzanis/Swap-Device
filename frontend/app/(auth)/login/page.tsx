@@ -23,6 +23,11 @@ import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { FcGoogle } from 'react-icons/fc';
+import { useState } from 'react';
+import { AxiosInstance } from '@/lib/axios';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
 
 const loginFormSchema = z.object({
   email: z.string().email('Masukkan email yang valid'),
@@ -35,6 +40,10 @@ const loginFormSchema = z.object({
 type LoginFormSchema = z.infer<typeof loginFormSchema>;
 
 const LoginPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -45,10 +54,31 @@ const LoginPage = () => {
 
   const { handleSubmit, control, reset } = form;
 
-  const onSubmit = handleSubmit((values) => {
-    console.log(values);
+  const loginUser = async (userData: LoginFormSchema) => {
+    setIsLoading(true);
+    setTimeout(async () => {
+      try {
+        const userResponse = await AxiosInstance.post('/auth/login', userData);
 
-    reset();
+        if (userResponse.status === 200) {
+          router.push('/');
+          reset();
+        }
+      } catch (error: any) {
+        setIsLoading(false);
+        toast({
+          variant: 'default',
+          title: error.response.data.message,
+          className: 'text-red-500',
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        console.log(error.response);
+      }
+    }, 3000);
+  };
+
+  const onSubmit = handleSubmit((values) => {
+    loginUser(values);
   });
 
   return (
@@ -99,7 +129,11 @@ const LoginPage = () => {
                           <FormItem>
                             <FormLabel className="px-1">Password</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Password" />
+                              <Input
+                                {...field}
+                                placeholder="Password"
+                                type="password"
+                              />
                             </FormControl>
                             <FormMessage className="px-1" />
                           </FormItem>
@@ -119,6 +153,7 @@ const LoginPage = () => {
                     <Button
                       className="w-full max-w-[70%] xl:w-[60%] m-auto mt-4"
                       type="submit"
+                      disabled={isLoading}
                     >
                       Login
                     </Button>
