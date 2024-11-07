@@ -26,6 +26,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
+import { AxiosInstance } from '@/lib/axios';
 
 const registerFormSchema = z
   .object({
@@ -74,10 +75,7 @@ const RegisterPage = () => {
   // function to handle post request for signup user
   const createUsers = async (userData: RegisterFormSchema) => {
     try {
-      const userResponse = await axios.post(
-        'http://localhost:5000/api/auth/signup',
-        userData
-      );
+      const userResponse = await AxiosInstance.post('/auth/signup', userData);
 
       if (userResponse.status === 201) {
         console.log('Berhasil login');
