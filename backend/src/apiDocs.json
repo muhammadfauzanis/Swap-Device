@@ -240,9 +240,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "email": { "type": "string" },
                   "verificationToken": { "type": "string" }
                 },
-                "required": ["verificationToken"]
+                "required": ["email", "verificationToken"]
               }
             }
           }
