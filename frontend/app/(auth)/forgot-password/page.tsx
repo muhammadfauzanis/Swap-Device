@@ -18,8 +18,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { ToastAction } from '@/components/ui/toast';
+import { useToast } from '@/hooks/use-toast';
+import { AxiosInstance } from '@/lib/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -30,6 +34,9 @@ const forgotPasswordFormSchema = z.object({
 type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>;
 
 const ForgotPasswordPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
   const form = useForm<ForgotPasswordFormSchema>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: {
@@ -39,10 +46,39 @@ const ForgotPasswordPage = () => {
 
   const { handleSubmit, control, reset } = form;
 
-  const onSubmit = handleSubmit((value) => {
-    console.log(value);
+  const forgotPasswordUser = (userData: ForgotPasswordFormSchema) => {
+    setIsLoading(true);
+    setTimeout(async () => {
+      try {
+        const userResponse = await AxiosInstance.post(
+          '/auth/forgot-password',
+          userData
+        );
 
-    reset();
+        if (userResponse.status === 200) {
+          toast({
+            description: userResponse.data.message,
+            className: 'text-green-700 font-bold',
+          });
+
+          reset();
+          setIsLoading(false);
+        }
+      } catch (error: any) {
+        setIsLoading(false);
+        toast({
+          variant: 'default',
+          title: error.response.data.message,
+          className: 'text-red-500',
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        console.log(error.response);
+      }
+    }, 3000);
+  };
+
+  const onSubmit = handleSubmit((value) => {
+    forgotPasswordUser(value);
   });
 
   return (
@@ -78,6 +114,7 @@ const ForgotPasswordPage = () => {
                     <Button
                       className="w-full max-w-[70%] xl:w-[60%] m-auto mt-3"
                       type="submit"
+                      disabled={isLoading}
                     >
                       Kirim
                     </Button>
