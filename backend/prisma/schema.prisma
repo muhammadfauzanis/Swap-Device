@@ -24,7 +24,7 @@ model User{
   isVerified    Boolean      @default(false)
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
-  verificationToken   String? 
+  verificationToken   Int? 
   resetPasswordToken  String?
   verificationTokenExpired   DateTime?
   resetPasswordTokenExpired  DateTime?

@@ -49,9 +49,7 @@ export const signupUser = async (
       // Check if user has already register before but not verified allow them to click register again and just send verifcode
       if (userEmail?.isVerified === false) {
         const userId = userEmail.user_id;
-        const verificationToken = Math.floor(
-          100000 + Math.random() * 900000
-        ).toString();
+        const verificationToken = Math.floor(100000 + Math.random() * 900000);
 
         const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
 
@@ -89,9 +87,7 @@ export const signupUser = async (
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const verificationToken = Math.floor(
-      100000 + Math.random() * 900000
-    ).toString();
+    const verificationToken = Math.floor(100000 + Math.random() * 900000);
 
     const verificationTokenExpired = new Date(Date.now() + 5 * 60 * 1000);
 

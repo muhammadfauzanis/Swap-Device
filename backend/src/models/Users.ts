@@ -40,7 +40,7 @@ export const findResetPasswordTokenUser = async (token: string) => {
   return user;
 };
 
-export const validateVerificationToken = async (verificationToken: string) => {
+export const validateVerificationToken = async (verificationToken: number) => {
   const user = await prisma.user.findFirst({
     where: {
       verificationToken: verificationToken,
@@ -59,7 +59,7 @@ export const createUser = async (userData: any) => {
 export const updateUserData = async (
   userId: number,
   isVerified: boolean,
-  verificationToken: string | null,
+  verificationToken: number | null,
   verificationTokenExpired: Date | null
 ) => {
   const user = await prisma.user.update({

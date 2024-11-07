@@ -14,14 +14,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-function sendVerificationEmail(userEmail: string, verificationToken: string) {
+function sendVerificationEmail(userEmail: string, verificationToken: number) {
   const mailOptions = {
     from: `Swap Device Team <${process.env.EMAIL}>`,
     to: userEmail,
     subject: 'Verification Email Swap Device',
     html: VERIFICATION_EMAIL_TEMPLATE.replace(
       '{verificationCode}',
-      verificationToken
+      verificationToken.toString()
     ),
   };
 
