@@ -26,6 +26,7 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import { AxiosInstance } from '@/lib/axios';
+import VerifyUserPage from './VerifyUser';
 
 const registerFormSchema = z
   .object({
@@ -57,7 +58,9 @@ type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 const RegisterPage = () => {
   const { toast } = useToast();
-  const [isRegistered, setisRegistered] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, SetIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
 
   const form = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
@@ -74,14 +77,16 @@ const RegisterPage = () => {
 
   // function to handle post request for signup user
   const createUsers = async (userData: RegisterFormSchema) => {
+    SetIsLoading(true);
     try {
-      const userResponse = await AxiosInstance.post('/auth/signup', userData);
+      setTimeout(async () => {
+        const userResponse = await AxiosInstance.post('/auth/signup', userData);
 
-      if (userResponse.status === 201) {
-        console.log('Berhasil login');
-        setisRegistered(true);
-        reset();
-      }
+        if (userResponse.status === 201 || userResponse.status === 200) {
+          setIsRegistered(true);
+          reset();
+        }
+      }, 3000);
     } catch (error: any) {
       toast({
         variant: 'default',
@@ -96,9 +101,10 @@ const RegisterPage = () => {
   const onSubmit = handleSubmit((values) => {
     // call createUsers function and throw values
     createUsers(values);
+    setEmail(values.email);
   });
 
-  return (
+  return !isRegistered ? (
     <div className="w-full h-screen flex flex-col">
       <div className="flex flex-1 justify-center items-center h-screen">
         <div className="max-w-lg w-full h-auto p-5 md:p-0">
@@ -195,10 +201,10 @@ const RegisterPage = () => {
                     <Button
                       className="w-full max-w-[70%] xl:w-[60%] m-auto my-3"
                       type="submit"
+                      disabled={isLoading}
                     >
                       Register
                     </Button>
-
                     <p className="text-xs text-gray-500">
                       Your data will be protected and will not be shared
                     </p>
@@ -210,6 +216,8 @@ const RegisterPage = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <VerifyUserPage userEmail={email} />
   );
 };
 

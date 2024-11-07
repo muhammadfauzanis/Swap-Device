@@ -23,16 +23,23 @@ import {
 import { AxiosInstance } from '@/lib/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const verifyFormSchema = z.object({
-  verificationToken: z.string().min(4, 'Masukkan 4 digit token verifikasi'),
+  verificationToken: z.string().min(6, 'Masukkan 4 digit token verifikasi'),
 });
 
 type VerifyFormSchema = z.infer<typeof verifyFormSchema>;
 
-const VerifyUserPage = () => {
+interface VerifyUserPageProps {
+  userEmail: string;
+}
+
+const VerifyUserPage = ({ userEmail }: VerifyUserPageProps) => {
+  const [isLoading, setSetIsLoading] = useState(false);
+
   const form = useForm<VerifyFormSchema>({
     resolver: zodResolver(verifyFormSchema),
     defaultValues: { verificationToken: '' },
@@ -41,17 +48,24 @@ const VerifyUserPage = () => {
   const { handleSubmit, control, reset } = form;
 
   const verifiedUser = async (token: VerifyFormSchema) => {
+    setSetIsLoading(true);
     try {
-      const userResponse = await AxiosInstance.post(
-        '/auth/verify',
-        parseInt(token.verificationToken)
-      );
+      setTimeout(async () => {
+        const verificationToken = parseInt(token.verificationToken);
 
-      if (userResponse.status === 201) {
-        reset();
-      }
+        const userResponse = await AxiosInstance.post('/austh/verify', {
+          verificationToken,
+        });
+
+        console.log(userResponse.status);
+
+        if (userResponse.status === 201) {
+          reset();
+        }
+      }, 3000);
     } catch (error: any) {
       console.log(error.response);
+      console.log('sadsa');
     }
   };
 
@@ -68,7 +82,7 @@ const VerifyUserPage = () => {
               Masukkan kode verifikasi
             </CardTitle>
             <CardDescription className="text-center">
-              Kode verifikasi telah dikirim ke email anda
+              Kode verifikasi telah dikirim ke email {userEmail}
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col justify-center items-center">
@@ -84,7 +98,7 @@ const VerifyUserPage = () => {
                     <FormItem>
                       <FormControl>
                         <InputOTP
-                          maxLength={4}
+                          maxLength={6}
                           {...field}
                           pattern={REGEXP_ONLY_DIGITS}
                         >
@@ -93,6 +107,8 @@ const VerifyUserPage = () => {
                             <InputOTPSlot index={1} />
                             <InputOTPSlot index={2} />
                             <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
                           </InputOTPGroup>
                         </InputOTP>
                       </FormControl>
@@ -104,6 +120,7 @@ const VerifyUserPage = () => {
                 <Button
                   className="w-full max-w-[70%] xl:w-[60%] m-auto mt-3"
                   type="submit"
+                  // disabled={isLoading}
                 >
                   Kirim
                 </Button>
