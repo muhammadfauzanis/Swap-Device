@@ -20,15 +20,18 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { ToastAction } from '@/components/ui/toast';
+import { useToast } from '@/hooks/use-toast';
 import { AxiosInstance } from '@/lib/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const verifyFormSchema = z.object({
-  verificationToken: z.string().min(6, 'Masukkan 4 digit token verifikasi'),
+  verificationToken: z.string().min(6, 'Masukkan 6 digit token verifikasi'),
 });
 
 type VerifyFormSchema = z.infer<typeof verifyFormSchema>;
@@ -39,6 +42,8 @@ interface VerifyUserPageProps {
 
 const VerifyUserPage = ({ userEmail }: VerifyUserPageProps) => {
   const [isLoading, setSetIsLoading] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<VerifyFormSchema>({
     resolver: zodResolver(verifyFormSchema),
@@ -49,24 +54,30 @@ const VerifyUserPage = ({ userEmail }: VerifyUserPageProps) => {
 
   const verifiedUser = async (token: VerifyFormSchema) => {
     setSetIsLoading(true);
-    try {
-      setTimeout(async () => {
+    setTimeout(async () => {
+      try {
         const verificationToken = parseInt(token.verificationToken);
 
-        const userResponse = await AxiosInstance.post('/austh/verify', {
+        const userResponse = await AxiosInstance.post('/auth/verify', {
+          email: userEmail,
           verificationToken,
         });
 
-        console.log(userResponse.status);
-
         if (userResponse.status === 201) {
+          router.push('/login');
           reset();
         }
-      }, 3000);
-    } catch (error: any) {
-      console.log(error.response);
-      console.log('sadsa');
-    }
+      } catch (error: any) {
+        setSetIsLoading(false);
+        toast({
+          variant: 'default',
+          title: error.response.data.message,
+          className: 'text-red-500',
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        console.log(error.response);
+      }
+    }, 3000);
   };
 
   const onSubmit = handleSubmit((values) => {
@@ -120,7 +131,7 @@ const VerifyUserPage = ({ userEmail }: VerifyUserPageProps) => {
                 <Button
                   className="w-full max-w-[70%] xl:w-[60%] m-auto mt-3"
                   type="submit"
-                  // disabled={isLoading}
+                  disabled={isLoading}
                 >
                   Kirim
                 </Button>

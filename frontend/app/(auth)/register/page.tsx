@@ -78,24 +78,25 @@ const RegisterPage = () => {
   // function to handle post request for signup user
   const createUsers = async (userData: RegisterFormSchema) => {
     SetIsLoading(true);
-    try {
-      setTimeout(async () => {
+    setTimeout(async () => {
+      try {
         const userResponse = await AxiosInstance.post('/auth/signup', userData);
 
         if (userResponse.status === 201 || userResponse.status === 200) {
           setIsRegistered(true);
           reset();
         }
-      }, 3000);
-    } catch (error: any) {
-      toast({
-        variant: 'default',
-        title: error.response.data.message,
-        className: 'text-red-500',
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
-      });
-      console.log(error.response);
-    }
+      } catch (error: any) {
+        SetIsLoading(false);
+        toast({
+          variant: 'default',
+          title: error.response.data.message,
+          className: 'text-red-500',
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        console.log(error.response);
+      }
+    }, 3000);
   };
 
   const onSubmit = handleSubmit((values) => {
