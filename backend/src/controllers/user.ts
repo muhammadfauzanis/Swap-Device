@@ -117,15 +117,19 @@ export const verifyUserAccount = async (
   res: express.Response
 ) => {
   try {
-    const { verificationToken } = req.body;
+    const { email, verificationToken } = req.body;
 
-    const user = await validateVerificationToken(verificationToken);
+    const user = await findUserByEmail(email);
 
     if (user?.isVerified === true) {
       return response(400, null, 'Account has already verified', res);
     }
 
     if (!user) {
+      return response(404, null, 'User not found', res);
+    }
+
+    if (user.verificationToken !== verificationToken) {
       return response(400, null, 'Incorrect verification code!', res);
     }
 
