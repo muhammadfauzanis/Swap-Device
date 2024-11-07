@@ -360,9 +360,9 @@ export const resetPassword = async (
       user.resetPasswordTokenExpired.getTime() < currentTime
     ) {
       return response(
-        400,
+        410,
         null,
-        'Your link had expire, please make request again',
+        'Your link had expire, please request a new one',
         res
       );
     }
@@ -375,10 +375,10 @@ export const resetPassword = async (
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    await updatePassword(user.user_id, hashedPassword);
     await updateResetPasswordToken(user.user_id, null, null);
+    await updatePassword(user.user_id, hashedPassword);
 
-    return response(400, user, 'Success reset password', res);
+    return response(200, user, 'Success reset password', res);
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error when user change password', res);
