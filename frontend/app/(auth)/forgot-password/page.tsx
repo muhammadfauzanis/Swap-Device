@@ -26,6 +26,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { TbMailCheck } from 'react-icons/tb';
 
 const forgotPasswordFormSchema = z.object({
   email: z.string().email('Masukkan email yang valid'),
@@ -35,6 +36,7 @@ type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>;
 
 const ForgotPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<ForgotPasswordFormSchema>({
@@ -56,13 +58,9 @@ const ForgotPasswordPage = () => {
         );
 
         if (userResponse.status === 200) {
-          toast({
-            description: userResponse.data.message,
-            className: 'text-green-700 font-bold',
-          });
+          setIsSubmitted(true);
 
           reset();
-          setIsLoading(false);
         }
       } catch (error: any) {
         setIsLoading(false);
@@ -86,56 +84,66 @@ const ForgotPasswordPage = () => {
       <div className="flex flex-1 justify-center items-center h-screen">
         <div className="max-w-lg w-full h-auto p-5 md:p-0">
           <Card className=" shadow-lg">
-            <CardHeader>
-              <CardTitle>Lupa Sandi</CardTitle>
-              <CardDescription>
-                Silahkan masukkan alamat email di bawah. Anda akan menerima link
-                untuk mengganti password anda.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={onSubmit} className="px-3">
-                  <FormField
-                    control={control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="px-1">Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="Email" />
-                        </FormControl>
-                        <FormMessage className="px-1" />
-                      </FormItem>
-                    )}
-                  />
+            {!isSubmitted ? (
+              <>
+                <CardHeader>
+                  <CardTitle>Lupa Sandi</CardTitle>
+                  <CardDescription>
+                    Silahkan masukkan alamat email di bawah. Anda akan menerima
+                    link untuk mengganti password anda.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Form {...form}>
+                    <form onSubmit={onSubmit} className="px-3">
+                      <FormField
+                        control={control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="px-1">Email</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="Email" />
+                            </FormControl>
+                            <FormMessage className="px-1" />
+                          </FormItem>
+                        )}
+                      />
 
-                  <CardFooter className="flex flex-col gap-y-5 mt-3">
-                    <Button
-                      className="w-full max-w-[70%] xl:w-[60%] m-auto mt-3"
-                      type="submit"
-                      disabled={isLoading}
-                    >
-                      Kirim
-                    </Button>
-
-                    <p className="text-sm">
-                      Kembali ke{' '}
-                      <Link href={'/login'} className="font-bold text-black ">
-                        Login
-                      </Link>{' '}
-                      atau{' '}
-                      <Link
-                        href={'/register'}
-                        className="font-bold text-black "
+                      <Button
+                        className="w-full max-w-[70%] xl:w-[60%] m-auto mt-6 flex justify-center items-center "
+                        type="submit"
+                        disabled={isLoading}
                       >
-                        Register
-                      </Link>
-                    </p>
-                  </CardFooter>
-                </form>
-              </Form>
-            </CardContent>
+                        Kirim
+                      </Button>
+                    </form>
+                  </Form>
+                </CardContent>
+              </>
+            ) : (
+              <div className="flex flex-col justify-center items-center pt-4 pb-4">
+                <TbMailCheck size={70} className="text-green-500" />
+                <h1 className="font-bold">
+                  Permintaan ubah kata sandi berhasil
+                </h1>
+                <p className="text-sm">
+                  Link ubah kata sandi telah dikirim ke email anda.
+                </p>
+              </div>
+            )}
+            <CardFooter className="mt-2 flex justify-center items-center">
+              <p className="text-sm text-center mb-2">
+                Kembali ke{' '}
+                <Link href={'/login'} className="font-bold text-black ">
+                  Login
+                </Link>{' '}
+                atau{' '}
+                <Link href={'/register'} className="font-bold text-black ">
+                  Register
+                </Link>
+              </p>
+            </CardFooter>
           </Card>
         </div>
       </div>
