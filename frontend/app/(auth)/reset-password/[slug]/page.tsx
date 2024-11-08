@@ -23,6 +23,7 @@ import { useToast } from '@/hooks/use-toast';
 import { AxiosInstance } from '@/lib/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -33,11 +34,11 @@ const resetPasswordFormSchema = z
       .string()
       .min(8, 'Kata sandi minimal 8 karakter')
       .max(20, 'Kata sandi maksimal 20 karakter'),
-    repassword: z.string(),
+    rePassword: z.string(),
   })
-  .refine((data) => data.password === data.repassword, {
+  .refine((data) => data.password === data.rePassword, {
     message: 'Kata sandi konfirmasi tidak cocok dengan kata sandi anda',
-    path: ['repassword'],
+    path: ['rePassword'],
   });
 
 type ResetPasswordFormSchema = z.infer<typeof resetPasswordFormSchema>;
@@ -50,12 +51,13 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
   const { params } = props;
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<ResetPasswordFormSchema>({
     resolver: zodResolver(resetPasswordFormSchema),
     defaultValues: {
       password: '',
-      repassword: '',
+      rePassword: '',
     },
   });
 
@@ -71,6 +73,15 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
         );
 
         if (userResponse.status === 200) {
+          toast({
+            description:
+              'Atur ulang kata sandi berhasil, anda akan kembali ke halaman login...',
+            className: 'font-bold text-green-600',
+          });
+
+          setTimeout(() => {
+            router.push('/login');
+          }, 3000);
         }
       } catch (error: any) {
         setIsLoading(false);
@@ -123,7 +134,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
 
                   <FormField
                     control={control}
-                    name="repassword"
+                    name="rePassword"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="px-1">Ulang Kata Sandi</FormLabel>
