@@ -1,8 +1,10 @@
 import express from 'express';
 import {
+  callbackLoginWithGoogle,
   forgotPassword,
   getDetailUser,
   loginUser,
+  loginWithGoogle,
   logoutUser,
   resetPassword,
   signupUser,
@@ -48,5 +50,9 @@ router.post(
     .withMessage('Password minimal 8 karakter'),
   resetPassword
 );
+
+// Login with google routes
+router.get('/google', loginWithGoogle);
+router.get('/google/callback', callbackLoginWithGoogle);
 
 export default router;

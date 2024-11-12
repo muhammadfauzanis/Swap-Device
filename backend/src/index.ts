@@ -15,23 +15,6 @@ const app = express();
 // API Documentation with Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocumentation));
 
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  'http://localhost:5000/api/auth/google/callback'
-);
-
-const scopes = [
-  'https://www.googleapis.com/auth/userinfo.email',
-  'https://www.googleapis.com/auth/userinfo.profile',
-];
-
-const authorizationUrl = oauth2Client.generateAuthUrl({
-  access_type: 'offline',
-  scope: scopes,
-  include_granted_scopes: true,
-});
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());

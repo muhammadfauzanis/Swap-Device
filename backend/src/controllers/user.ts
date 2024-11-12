@@ -19,6 +19,8 @@ import {
   sendVerificationEmail,
 } from '../helper/sentEmail';
 import crypto from 'crypto';
+import { authorizationUrl, oauth2Client } from '../helper/loginWithGoogle';
+import { google } from 'googleapis';
 
 export const signupUser = async (
   req: express.Request,
@@ -221,6 +223,61 @@ export const loginUser = async (
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error when user login', res);
+  }
+};
+
+// Login with google controllers
+export const loginWithGoogle = (
+  req: express.Request,
+  res: express.Response
+) => {
+  res.redirect(authorizationUrl);
+};
+
+// Google callback login
+export const callbackLoginWithGoogle = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { code } = req.query;
+
+    const { tokens } = await oauth2Client.getToken(code as string);
+
+    oauth2Client.setCredentials(tokens);
+
+    const oauth2 = google.oauth2({
+      auth: oauth2Client,
+      version: 'v2',
+    });
+
+    const { data } = await oauth2.userinfo.get();
+
+    if (!data.email) {
+      return response(404, data, 'User not found', res);
+    }
+
+    const user = await findUserByEmail(data.email);
+
+    if (!user) {
+      await createUser({
+        name: data.email,
+        email: data.email,
+        auth_provider: 'GOOGLE',
+        isVerified: true,
+      });
+    }
+
+    if (!user?.user_id) {
+      return response(404, null, 'User not found', res);
+    }
+
+    const token = generateTokenAndSetCookie(user?.user_id, res);
+
+    return res.redirect(`http://localhost:3000/auth-success?token=${token}`);
+  } catch (error) {
+    console.log(error);
+    return response(500, null, 'Error server when login with google', res);
   }
 };
 
