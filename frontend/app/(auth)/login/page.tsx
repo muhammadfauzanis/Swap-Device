@@ -77,6 +77,17 @@ const LoginPage = () => {
     }, 3000);
   };
 
+  const handleLoginWithGoogle = async () => {
+    try {
+      window.location.href = process.env.NEXT_PUBLIC_API_URL + 'auth/google';
+
+      const userResponse = await AxiosInstance('/auth/google/callback');
+      console.log(userResponse);
+    } catch (error: any) {
+      console.log(error.response);
+    }
+  };
+
   const onSubmit = handleSubmit((values) => {
     loginUser(values);
   });
@@ -94,20 +105,22 @@ const LoginPage = () => {
                   Register di sini
                 </Link>
               </CardDescription>
+              <div className="pt-4">
+                <Button
+                  variant={'outline'}
+                  className="w-full max-w-[70%] xl:w-[60%] m-auto flex justify-center items-center gap-x-5 shadow-md"
+                  onClick={handleLoginWithGoogle}
+                >
+                  <FcGoogle size={20} />
+                  <p>Login With Google</p>
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <Form {...form}>
                 <form onSubmit={onSubmit}>
                   <div className="grid w-full items-center gap-4 px-3">
                     <div className="flex flex-col space-y-3">
-                      <Button
-                        variant={'outline'}
-                        className="w-full max-w-[70%] xl:w-[60%] m-auto flex justify-center items-center gap-x-5 shadow-md"
-                      >
-                        <FcGoogle size={20} />
-                        <p>Login With Google</p>
-                      </Button>
-
                       <FormField
                         control={control}
                         name="email"
