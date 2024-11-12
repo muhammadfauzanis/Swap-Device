@@ -6,6 +6,7 @@ import {
   findUserByPhoneNumber,
   updatePassword,
   updateResetPasswordToken,
+  updateUser,
   updateUserData,
   validateVerificationToken,
 } from '../models/Users';
@@ -19,7 +20,7 @@ import {
   sendVerificationEmail,
 } from '../helper/sentEmail';
 import crypto from 'crypto';
-import { authorizationUrl, oauth2Client } from '../helper/loginWithGoogle';
+import { authorizationUrl, oauth2Client } from '../utils/loginWithGoogle';
 import { google } from 'googleapis';
 
 export const signupUser = async (
@@ -261,20 +262,24 @@ export const callbackLoginWithGoogle = async (
 
     if (!user) {
       await createUser({
-        name: data.email,
+        name: data.name,
         email: data.email,
         auth_provider: 'GOOGLE',
-        isVerified: true,
+        isVerified: data.verified_email,
       });
+    }
+
+    if (user) {
+      await updateUser(user.user_id, data?.name!);
     }
 
     if (!user?.user_id) {
       return response(404, null, 'User not found', res);
     }
 
-    const token = generateTokenAndSetCookie(user?.user_id, res);
+    generateTokenAndSetCookie(user?.user_id, res);
 
-    return res.redirect(`http://localhost:3000/auth-success?token=${token}`);
+    return res.redirect(`http://localhost:3000`);
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error server when login with google', res);
