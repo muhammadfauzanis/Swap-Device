@@ -261,23 +261,22 @@ export const callbackLoginWithGoogle = async (
     const user = await findUserByEmail(data.email);
 
     if (!user) {
-      await createUser({
+      const userData = await createUser({
         name: data.name,
         email: data.email,
         auth_provider: 'GOOGLE',
         isVerified: data.verified_email,
       });
+      generateTokenAndSetCookie(userData.user_id, res);
     }
 
     if (user) {
       await updateUser(user.user_id, data?.name!);
     }
 
-    if (!user?.user_id) {
-      return response(404, null, 'User not found', res);
-    }
-
-    generateTokenAndSetCookie(user?.user_id, res);
+    // if (!user?.user_id) {
+    //   return response(404, null, 'User not found', res);
+    // }
 
     return res.redirect(`http://localhost:3000`);
   } catch (error) {
