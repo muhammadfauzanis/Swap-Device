@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 export const generateTokenAndSetCookie = (
   userId: number,
+  name: string,
   res: express.Response
 ) => {
   const jwtSecret = process.env.JWT_SECRET;
@@ -11,7 +12,7 @@ export const generateTokenAndSetCookie = (
     throw new Error('JWT_SECRET is not defined in the environment variables');
   }
 
-  const token = jwt.sign({ userId }, jwtSecret, {
+  const token = jwt.sign({ userId, name }, jwtSecret, {
     expiresIn: '15d',
   });
 

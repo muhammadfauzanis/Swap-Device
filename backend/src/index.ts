@@ -6,7 +6,6 @@ import apiDocumentation from './apiDocs.json';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user';
-import { google } from 'googleapis';
 
 dotenv.config();
 
@@ -15,7 +14,7 @@ const app = express();
 // API Documentation with Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocumentation));
 
-app.use(cors());
+app.use(cors({ credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());

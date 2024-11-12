@@ -106,7 +106,7 @@ export const signupUser = async (
       verificationTokenExpired,
     });
 
-    generateTokenAndSetCookie(userData.user_id, res);
+    generateTokenAndSetCookie(userData.user_id, userData.name, res);
 
     return response(201, userData, 'Sucess create user', res);
   } catch (error) {
@@ -212,7 +212,7 @@ export const loginUser = async (
     }
 
     // Generate token for user
-    const token = generateTokenAndSetCookie(user?.user_id, res);
+    const token = generateTokenAndSetCookie(user?.user_id, user.name, res);
 
     const userData = {
       token,
@@ -274,7 +274,7 @@ export const callbackLoginWithGoogle = async (
       userData = user;
     }
 
-    generateTokenAndSetCookie(userData?.user_id, res);
+    generateTokenAndSetCookie(userData.user_id, userData.name, res);
 
     return res.redirect(`http://localhost:3000`);
   } catch (error) {
