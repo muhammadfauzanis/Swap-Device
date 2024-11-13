@@ -28,6 +28,7 @@ import { AxiosInstance } from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
+import Cookies from 'js-cookie';
 
 const loginFormSchema = z.object({
   email: z.string().email('Masukkan email yang valid'),
@@ -77,17 +78,6 @@ const LoginPage = () => {
     }, 3000);
   };
 
-  const handleLoginWithGoogle = async () => {
-    try {
-      window.location.href = process.env.NEXT_PUBLIC_API_URL + 'auth/google';
-
-      const userResponse = await AxiosInstance('/auth/google/callback');
-      console.log(userResponse);
-    } catch (error: any) {
-      console.log(error.response);
-    }
-  };
-
   const onSubmit = handleSubmit((values) => {
     loginUser(values);
   });
@@ -105,16 +95,18 @@ const LoginPage = () => {
                   Register di sini
                 </Link>
               </CardDescription>
-              <div className="pt-4">
+              <Link
+                href={`${process.env.NEXT_PUBLIC_API_URL}auth/google`}
+                className="pt-4"
+              >
                 <Button
                   variant={'outline'}
                   className="w-full max-w-[70%] xl:w-[60%] m-auto flex justify-center items-center gap-x-5 shadow-md"
-                  onClick={handleLoginWithGoogle}
                 >
                   <FcGoogle size={20} />
                   <p>Login With Google</p>
                 </Button>
-              </div>
+              </Link>
             </CardHeader>
             <CardContent>
               <Form {...form}>

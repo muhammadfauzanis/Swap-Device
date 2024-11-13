@@ -6,6 +6,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { IoMdClose } from 'react-icons/io';
 import { Button } from './ui/button';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
   const [header, setHeader] = useState(false);

@@ -38,8 +38,11 @@ const ProductCarousel = ({
       <div className="w-[90%] ">
         <Carousel>
           <CarouselContent>
-            {Array.from({ length: 5 }).map(() => (
-              <CarouselItem className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 flex flex-col items-center justify-center cursor-pointer">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <CarouselItem
+                className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 flex flex-col items-center justify-center cursor-pointer"
+                key={index}
+              >
                 <ProductCard
                   productName="iPhone 15 Pro Max"
                   price="IDR 14.000.000"
