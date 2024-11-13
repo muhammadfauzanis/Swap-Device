@@ -274,9 +274,13 @@ export const callbackLoginWithGoogle = async (
       userData = user;
     }
 
-    generateTokenAndSetCookie(userData.user_id, userData.name, res);
+    const token = generateTokenAndSetCookie(
+      userData.user_id,
+      userData.name,
+      res
+    );
 
-    return res.redirect(`http://localhost:3000`);
+    return res.redirect(`http://localhost:3000/?token=${token}`);
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error server when login with google', res);
