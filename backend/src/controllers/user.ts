@@ -283,7 +283,7 @@ export const callbackLoginWithGoogle = async (
     return res.redirect(`http://localhost:3000/auth-success/?token=${token}`);
   } catch (error) {
     console.log(error);
-    return response(500, null, 'Error server when login with google', res);
+    return res.redirect(`http://localhost:3000/login`);
   }
 };
 
