@@ -63,6 +63,7 @@ const LoginPage = () => {
 
         if (userResponse.status === 200) {
           router.push('/');
+          Cookies.set('auth_token', userResponse.data.data.token);
           reset();
         }
       } catch (error: any) {
