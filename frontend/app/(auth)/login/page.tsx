@@ -78,6 +78,14 @@ const LoginPage = () => {
     }, 3000);
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      window.location.href = process.env.NEXT_PUBLIC_API_URL + 'auth/google';
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmit = handleSubmit((values) => {
     loginUser(values);
   });
@@ -95,18 +103,19 @@ const LoginPage = () => {
                   Register di sini
                 </Link>
               </CardDescription>
-              <Link
-                href={`${process.env.NEXT_PUBLIC_API_URL}auth/google`}
+              <div
+                // href={`${process.env.NEXT_PUBLIC_API_URL}auth/google`}
                 className="pt-4"
               >
                 <Button
                   variant={'outline'}
                   className="w-full max-w-[70%] xl:w-[60%] m-auto flex justify-center items-center gap-x-5 shadow-md"
+                  onClick={handleGoogleLogin}
                 >
                   <FcGoogle size={20} />
                   <p>Login With Google</p>
                 </Button>
-              </Link>
+              </div>
             </CardHeader>
             <CardContent>
               <Form {...form}>

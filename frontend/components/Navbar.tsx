@@ -20,6 +20,9 @@ const Navbar = () => {
     }
   };
 
+  const token = Cookies.get('auth_token');
+  console.log(token);
+
   const categories = [
     { name: 'iPhone', link: '/' },
     { name: 'iPad', link: '/' },
