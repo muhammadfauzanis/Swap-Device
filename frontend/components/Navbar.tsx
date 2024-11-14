@@ -4,16 +4,14 @@ import { useEffect, useState } from 'react';
 import { CiHeart, CiSearch } from 'react-icons/ci';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { IoMdClose } from 'react-icons/io';
-import { FaUser } from 'react-icons/fa';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import { getDecodeJwt, getToken } from '@/utils/auth';
+import { getToken } from '@/utils/auth';
 
 const Navbar = () => {
   const [header, setHeader] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const token = getToken(); // get token from Cookie
-  const decodeData = getDecodeJwt(); // get decode data
 
   const scrollHeader = () => {
     if (window.scrollY >= 20) {
@@ -80,7 +78,7 @@ const Navbar = () => {
       <div className="flex items-center gap-x-2 md:gap-x-4 cursor-pointer">
         <CiSearch
           size={25}
-          className="hover:text-gray-300 transition-all duration-300 mr-1"
+          className="hover:text-gray-300 transition-all duration-300 mr-2 md:mr-0"
         />
         <Link href="/wishlist">
           <CiHeart
@@ -90,18 +88,13 @@ const Navbar = () => {
         </Link>
 
         {token ? (
-          <Link
-            href="/logout"
-            className="flex items-center justify-center space-x-2"
-          >
-            <FaUser size={20} />
-            <p>{decodeData?.name}</p>
+          <Link href="/user" className="flex items-center gap-x-4">
+            <Button className="hidden sm:hidden md:block">
+              <p>Profil Saya</p>
+            </Button>
           </Link>
         ) : (
-          <Link
-            href="/login"
-            className="flex items-center justify-center space-x-2"
-          >
+          <Link href="/login">
             <Button className="hidden sm:hidden md:block">Login</Button>
           </Link>
         )}
@@ -136,9 +129,15 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-          <Link href="/login" onClick={() => setIsOpen(false)}>
-            <Button className="mt-8 text-xl p-5">Login</Button>
-          </Link>
+          {token ? (
+            <Link href="/user" onClick={() => setIsOpen(false)}>
+              <Button className="mt-8 text-xl p-5">Profil Saya</Button>
+            </Link>
+          ) : (
+            <Link href="/login" onClick={() => setIsOpen(false)}>
+              <Button className="mt-8 text-xl p-5">Login</Button>
+            </Link>
+          )}
         </div>
       )}
     </nav>
