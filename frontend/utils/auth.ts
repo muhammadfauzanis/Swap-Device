@@ -12,6 +12,12 @@ interface CustomJwtPayload extends JwtPayload {
   name: string;
 }
 
+export const removeToken = () => {
+  const token = Cookies.remove('auth_token');
+
+  return token;
+};
+
 export const getDecodeJwt = () => {
   const token = getToken();
 

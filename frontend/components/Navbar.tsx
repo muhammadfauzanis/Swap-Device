@@ -11,7 +11,8 @@ import { getToken } from '@/utils/auth';
 const Navbar = () => {
   const [header, setHeader] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const token = getToken(); // get token from Cookie
+  const [token, setToken] = useState('');
+  const [buttonText, setButtonText] = useState('');
 
   const scrollHeader = () => {
     if (window.scrollY >= 20) {
@@ -30,6 +31,11 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
+    const authToken = getToken();
+    if (authToken) {
+      setToken(authToken);
+    }
+
     window.addEventListener('scroll', scrollHeader);
 
     return () => {
@@ -49,6 +55,14 @@ const Navbar = () => {
       document.body.classList.remove('overflow-hidden');
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (token) {
+      setButtonText('Profil Saya');
+    } else {
+      setButtonText('Login');
+    }
+  }, [token]);
 
   return (
     <nav
@@ -90,12 +104,12 @@ const Navbar = () => {
         {token ? (
           <Link href="/user" className="flex items-center gap-x-4">
             <Button className="hidden sm:hidden md:block">
-              <p>Profil Saya</p>
+              <p>{buttonText}</p>
             </Button>
           </Link>
         ) : (
           <Link href="/login">
-            <Button className="hidden sm:hidden md:block">Login</Button>
+            <Button className="hidden sm:hidden md:block">{buttonText}</Button>
           </Link>
         )}
 
