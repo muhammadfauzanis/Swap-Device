@@ -2,13 +2,11 @@
 
 import { AxiosInstance } from '@/lib/axios';
 import { removeToken } from '@/utils/auth';
-import { redirect, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 
 const SideBarUser = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const logOutUser = () => {
     setIsLoading(true);
@@ -18,7 +16,7 @@ const SideBarUser = () => {
 
         if (userResponse.status === 200) {
           removeToken();
-          router.push('/');
+          window.location.href = '/';
         }
       } catch (error) {
         console.log(error);

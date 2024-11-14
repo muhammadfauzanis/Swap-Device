@@ -102,10 +102,8 @@ const Navbar = () => {
         </Link>
 
         {token ? (
-          <Link href="/user" className="flex items-center gap-x-4">
-            <Button className="hidden sm:hidden md:block">
-              <p>{buttonText}</p>
-            </Button>
+          <Link href="/user">
+            <Button className="hidden sm:hidden md:block">{buttonText}</Button>
           </Link>
         ) : (
           <Link href="/login">

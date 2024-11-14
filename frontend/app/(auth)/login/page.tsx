@@ -25,7 +25,6 @@ import { z } from 'zod';
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import { AxiosInstance } from '@/lib/axios';
-import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import Cookies from 'js-cookie';
@@ -42,7 +41,6 @@ type LoginFormSchema = z.infer<typeof loginFormSchema>;
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm<LoginFormSchema>({
@@ -62,7 +60,7 @@ const LoginPage = () => {
         const userResponse = await AxiosInstance.post('/auth/login', userData);
 
         if (userResponse.status === 200) {
-          router.push('/');
+          window.location.href = '/';
           Cookies.set('auth_token', userResponse.data.data.token);
           reset();
         }
