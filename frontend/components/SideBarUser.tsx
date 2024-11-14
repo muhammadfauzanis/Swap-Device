@@ -5,10 +5,10 @@ const SideBarUser = () => {
     <div className="p-3 space-y-16">
       <div className="flex items-center gap-x-3">
         <FaUser size={35} />
-        <div className="">
+        {/* <div className="">
           <p className="font-bold">Walter White</p>
           <p className="text-sm">walterwhite@gmail.com</p>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex flex-col gap-y-3">

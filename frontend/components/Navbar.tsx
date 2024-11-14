@@ -4,13 +4,16 @@ import { useEffect, useState } from 'react';
 import { CiHeart, CiSearch } from 'react-icons/ci';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { IoMdClose } from 'react-icons/io';
+import { FaUser } from 'react-icons/fa';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import Cookies from 'js-cookie';
+import { getDecodeJwt, getToken } from '@/utils/auth';
 
 const Navbar = () => {
   const [header, setHeader] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const token = getToken(); // get token from Cookie
+  const decodeData = getDecodeJwt(); // get decode data
 
   const scrollHeader = () => {
     if (window.scrollY >= 20) {
@@ -19,9 +22,6 @@ const Navbar = () => {
       setHeader(false);
     }
   };
-
-  const token = Cookies.get('auth_token');
-  console.log(token);
 
   const categories = [
     { name: 'iPhone', link: '/' },
@@ -89,9 +89,22 @@ const Navbar = () => {
           />
         </Link>
 
-        <Link href="/login">
-          <Button className="hidden sm:hidden md:block">Login</Button>
-        </Link>
+        {token ? (
+          <Link
+            href="/logout"
+            className="flex items-center justify-center space-x-2"
+          >
+            <FaUser size={20} />
+            <p>{decodeData?.name}</p>
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="flex items-center justify-center space-x-2"
+          >
+            <Button className="hidden sm:hidden md:block">Login</Button>
+          </Link>
+        )}
 
         {!isOpen ? (
           <RxHamburgerMenu
