@@ -11,6 +11,7 @@ import {
   verifyUserAccount,
 } from '../controllers/user';
 import { body } from 'express-validator';
+import { authMiddleware } from '../middlewares/auth';
 
 const router = express.Router();
 
@@ -37,7 +38,7 @@ router.post(
   loginUser
 );
 router.post('/logout', logoutUser);
-router.get('/user-detail/:userId', getDetailUser);
+router.get('/user-detail/:userId', authMiddleware, getDetailUser);
 router.post(
   '/forgot-password',
   body('email').isEmail().withMessage('Email tidak valid'),
