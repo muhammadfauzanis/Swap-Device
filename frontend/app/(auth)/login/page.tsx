@@ -23,11 +23,11 @@ import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { FcGoogle } from 'react-icons/fc';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AxiosInstance } from '@/lib/axios';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
-import Cookies from 'js-cookie';
+import { setToken } from '@/utils/auth';
 
 const loginFormSchema = z.object({
   email: z.string().email('Masukkan email yang valid'),
@@ -61,7 +61,7 @@ const LoginPage = () => {
 
         if (userResponse.status === 200) {
           window.location.href = '/';
-          Cookies.set('auth_token', userResponse.data.data.token);
+          setToken(userResponse.data.data.token);
           reset();
         }
       } catch (error: any) {

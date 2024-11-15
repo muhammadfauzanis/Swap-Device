@@ -8,6 +8,13 @@ export const getToken = () => {
   return token;
 };
 
+// set token from cookies to cookies
+export const setToken = (jwtToken: string) => {
+  const token = Cookies.set('auth_token', jwtToken);
+
+  return token;
+};
+
 interface CustomJwtPayload extends JwtPayload {
   name: string;
 }
