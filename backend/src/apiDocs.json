@@ -482,7 +482,7 @@
         }
       }
     },
-    "/api/logout": {
+    "/auth/logout": {
       "post": {
         "tags": ["User"],
         "summary": "User logout",
@@ -539,207 +539,7 @@
         }
       }
     },
-    "/auth/user-detail/{userId}": {
-      "get": {
-        "tags": ["User"],
-        "summary": "Get User Details",
-        "description": "Retrieves detailed information about a specific user.",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "The ID of the user to retrieve."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved user details.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "user_id": {
-                          "type": "integer",
-                          "example": 12
-                        },
-                        "email": {
-                          "type": "string",
-                          "example": "walterwhite@gmail.com"
-                        },
-                        "phone_number": {
-                          "type": "string",
-                          "example": "+62812345678"
-                        },
-                        "name": {
-                          "type": "string",
-                          "example": "walter white"
-                        },
-                        "password": {
-                          "type": "string",
-                          "example": "random string"
-                        },
-                        "auth_provider": {
-                          "type": "string",
-                          "example": "CREDENTIALS"
-                        },
-                        "balance": {
-                          "type": "integer",
-                          "example": 0
-                        },
-                        "isVerified": {
-                          "type": "boolean",
-                          "example": true
-                        },
-                        "created_at": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": "2024-10-24T02:34:19.314Z"
-                        },
-                        "updated_at": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": "2024-10-25T03:04:07.211Z"
-                        },
-                        "verificationToken": {
-                          "type": "string",
-                          "example": null
-                        },
-                        "resetPasswordToken": {
-                          "type": "string",
-                          "example": null
-                        },
-                        "verificationTokenExpired": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": null
-                        },
-                        "resetPasswordTokenExpired": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": null
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Success retrieved detail user"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid user ID or missing token.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User ID is required"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized request due to missing session token.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 401
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "You don't have a session token, please login."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User not found"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error occurred while retrieving user details.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 500
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Error when getting user details"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+
     "/auth/forgot-password": {
       "post": {
         "tags": ["User"],
@@ -1121,6 +921,207 @@
                     "message": {
                       "type": "string",
                       "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/user-detail/{userId}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get User Details",
+        "description": "Retrieves detailed information about a specific user.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the user to retrieve."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer",
+                          "example": 12
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "walterwhite@gmail.com"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "+62812345678"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "walter white"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "random string"
+                        },
+                        "auth_provider": {
+                          "type": "string",
+                          "example": "CREDENTIALS"
+                        },
+                        "balance": {
+                          "type": "integer",
+                          "example": 0
+                        },
+                        "isVerified": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-24T02:34:19.314Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-10-25T03:04:07.211Z"
+                        },
+                        "verificationToken": {
+                          "type": "string",
+                          "example": null
+                        },
+                        "resetPasswordToken": {
+                          "type": "string",
+                          "example": null
+                        },
+                        "verificationTokenExpired": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": null
+                        },
+                        "resetPasswordTokenExpired": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": null
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success retrieved detail user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user ID or missing token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User ID is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request due to missing session token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You don't have a session token, please login."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error occurred while retrieving user details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error when getting user details"
                     }
                   }
                 }

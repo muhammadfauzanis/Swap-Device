@@ -5,7 +5,8 @@ import swaggerUi from 'swagger-ui-express';
 import apiDocumentation from './apiDocs.json';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import userRoutes from './routes/user/auth/user';
+import authRoutes from './routes/user/auth';
+import userRoutes from './routes/user/user';
 
 dotenv.config();
 
@@ -25,7 +26,8 @@ app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Server is working');
 });
 
-app.use('/api/auth', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 
 const PORT = process.env.PORT || 8080;
 
