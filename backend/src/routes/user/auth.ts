@@ -8,7 +8,7 @@ import {
   resetPassword,
   signupUser,
   verifyUserAccount,
-} from '../../controllers/user';
+} from '../../controllers/user/auth';
 import { body } from 'express-validator';
 
 const router = express.Router();

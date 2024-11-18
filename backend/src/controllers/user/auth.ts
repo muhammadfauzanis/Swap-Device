@@ -9,18 +9,18 @@ import {
   updateUser,
   updateUserData,
   validateVerificationToken,
-} from '../models/Users';
-import response from '../response';
+} from '../../models/Users';
+import response from '../../response';
 import express from 'express';
 import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator';
-import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
+import { generateTokenAndSetCookie } from '../../utils/generateTokenAndSetCookie';
 import {
   sendResetPasswordLink,
   sendVerificationEmail,
-} from '../helper/sentEmail';
+} from '../../helper/sentEmail';
 import crypto from 'crypto';
-import { authorizationUrl, oauth2Client } from '../utils/loginWithGoogle';
+import { authorizationUrl, oauth2Client } from '../../utils/loginWithGoogle';
 import { google } from 'googleapis';
 
 export const signupUser = async (
