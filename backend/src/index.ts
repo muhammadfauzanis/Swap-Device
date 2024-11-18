@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import apiDocumentation from './apiDocs.json';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import userRoutes from './routes/user';
+import userRoutes from './routes/user/auth/user';
 
 dotenv.config();
 
