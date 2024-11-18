@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  const token = req.cookies.get('token');
+  const token = req.cookies.get('auth_token');
 
   // cek jika user telah memiliki token tetapi akses login maka redirect ke home
   if (token) {
@@ -23,5 +23,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/user-detail', '/profile', '/register'],
+  matcher: ['/login', '/profile', '/register'],
 };

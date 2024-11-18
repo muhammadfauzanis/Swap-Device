@@ -16,6 +16,7 @@ export const setToken = (jwtToken: string) => {
 };
 
 interface CustomJwtPayload extends JwtPayload {
+  userId: string;
   name: string;
 }
 

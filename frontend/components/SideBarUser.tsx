@@ -5,7 +5,12 @@ import { removeToken } from '@/utils/auth';
 import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 
-const SideBarUser = () => {
+interface SideBarDataProps {
+  name: string;
+  email: string;
+}
+
+const SideBarUser = ({ name, email }: SideBarDataProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const logOutUser = () => {
@@ -31,8 +36,8 @@ const SideBarUser = () => {
       <div className="flex items-center gap-x-3">
         <FaUser size={35} />
         <div className="">
-          <p className="font-bold">Walter White</p>
-          <p className="text-sm">walterwhite@gmail.com</p>
+          <p className="font-bold">{name}</p>
+          <p className="text-sm">{email}</p>
         </div>
       </div>
 

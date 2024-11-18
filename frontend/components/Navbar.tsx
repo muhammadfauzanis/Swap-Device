@@ -102,7 +102,7 @@ const Navbar = () => {
         </Link>
 
         {token ? (
-          <Link href="/user">
+          <Link href="/profile">
             <Button className="hidden sm:hidden md:block">{buttonText}</Button>
           </Link>
         ) : (
@@ -142,7 +142,7 @@ const Navbar = () => {
             ))}
           </ul>
           {token ? (
-            <Link href="/user" onClick={() => setIsOpen(false)}>
+            <Link href="/profile" onClick={() => setIsOpen(false)}>
               <Button className="mt-8 text-xl p-5">Profil Saya</Button>
             </Link>
           ) : (
