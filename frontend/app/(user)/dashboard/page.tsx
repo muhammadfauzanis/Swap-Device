@@ -4,17 +4,57 @@ import Footer from '@/components/Footer';
 import SideBarUser from '@/components/SideBarUser';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ToastAction } from '@/components/ui/toast';
+import { useToast } from '@/hooks/use-toast';
 import { AxiosInstance } from '@/lib/axios';
 import { getDecodeJwt, getToken } from '@/utils/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { FaUser } from 'react-icons/fa';
+import { z } from 'zod';
+
+const updateDataFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, 'Nama tidak boleh kosong')
+    .max(50, 'Nama maksimal 50 karakter'),
+  phoneNumber: z
+    .string()
+    .min(6, 'Masukkan nomor telepon yang valid')
+    .max(15, 'Masukkan nomor telepon yang valid')
+    .regex(
+      /^(?:\+?[1-9][0-9]{0,2})?[08|09][0-9]{7,11}$/,
+      'Masukkan nomor telepon yang valid'
+    ),
+  //   password: z
+  //     .string()
+  //     .min(8, 'Kata sandi minimal 8 karakter')
+  //     .max(20, 'Kata sandi maksimal 20 karakter'),
+  //   repassword: z.string(),
+  // })
+  // .refine((data) => data.password === data.repassword, {
+  //   message: 'Kata sandi konfirmasi tidak cocok dengan kata sandi anda',
+  //   path: ['repassword'],
+});
+
+type UpdateDataFormSchema = z.infer<typeof updateDataFormSchema>;
 
 interface UserDataProps {
+  userId: number;
   name: string;
   email: string;
-  userId: number;
+  // password: string;
   phone_number: string;
   balance: number;
   isVerified: boolean;
@@ -22,9 +62,14 @@ interface UserDataProps {
 
 const UserPage = () => {
   const [userData, setUserData] = useState<UserDataProps | null>(null);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   const token = getToken();
   const decodeData = getDecodeJwt();
   const userId = decodeData?.userId;
+
+  // function to get user data from db
   const getUserData = async () => {
     try {
       const userResponse = await AxiosInstance(`/user/user-detail/${userId}`, {
@@ -44,6 +89,92 @@ const UserPage = () => {
   useEffect(() => {
     getUserData();
   }, [userId]);
+
+  // function to validate form update data
+  const form = useForm<UpdateDataFormSchema>({
+    resolver: zodResolver(updateDataFormSchema),
+    defaultValues: {
+      name: userData?.name,
+      phoneNumber: userData?.phone_number,
+      // password: userData?.password,
+      // repassword: '',
+    },
+  });
+
+  const { handleSubmit, control, watch, reset } = form;
+
+  // function to call API update data user
+  const updateUserData = (userData: {
+    name?: string;
+    phoneNumber?: string;
+  }) => {
+    setIsLoading(true);
+    setTimeout(async () => {
+      try {
+        const userResponse = await AxiosInstance.put(
+          `/user/update-user/${userId}`,
+          userData,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (userResponse.status === 200) {
+          toast({
+            description: 'Update data berhasil',
+            className: 'font-bold text-green-600',
+          });
+
+          // masi perlu dibenerin mau diapain pas sukses
+          window.location.reload();
+        }
+      } catch (error: any) {
+        setIsLoading(false);
+        toast({
+          variant: 'default',
+          title: error.response.data.message,
+          className: 'text-red-500',
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        console.log(error.response);
+      }
+    }, 3000);
+  };
+
+  const onSubmit = handleSubmit((values) => {
+    const updatedData: { name?: string; phoneNumber?: string } = {};
+
+    if (values.name !== userData?.name) {
+      updatedData.name = values.name;
+    }
+
+    if (values.phoneNumber !== userData?.phone_number) {
+      updatedData.phoneNumber = values.phoneNumber;
+    }
+
+    if (Object.keys(updatedData).length > 0) {
+      updateUserData(updatedData);
+    }
+  });
+
+  useEffect(() => {
+    if (userData) {
+      reset({
+        name: userData.name,
+        phoneNumber: userData.phone_number,
+      });
+    }
+  }, [userData, form]);
+
+  useEffect(() => {
+    const formValues = watch();
+
+    // Cek apakah ada perubahan pada form dibandingkan dengan nilai asli userData
+    if (
+      formValues.name !== userData?.name ||
+      formValues.phoneNumber !== userData?.phone_number
+    ) {
+      setIsDisabled(false);
+    }
+  }, [watch, userData]);
 
   return (
     <div className="w-full h-screen">
@@ -72,17 +203,53 @@ const UserPage = () => {
                   />
                 </div>
 
-                <div className="space-y-2 pb-2">
-                  <Label className="px-1">Nama</Label>
-                  <Input defaultValue={userData?.name} />
-                </div>
-
-                <div className="space-y-2 pb-2">
-                  <Label className="px-1">Nomor Telepon</Label>
-                  <Input defaultValue={userData?.phone_number} />
-                </div>
-
-                <Button className="w-full mt-8">Update Profile</Button>
+                <Form {...form}>
+                  <form onSubmit={onSubmit} className="space-y-2">
+                    <FormField
+                      control={control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="px-1">Nama</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              value={field.value ?? userData?.name ?? ''}
+                            />
+                          </FormControl>
+                          <FormMessage className="px-1" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={control}
+                      name="phoneNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="px-1">Nomor Telepon</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              value={
+                                field.value ?? userData?.phone_number ?? ''
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage className="px-1" />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="pt-4">
+                      <Button
+                        className="w-full"
+                        type="submit"
+                        disabled={isDisabled || isLoading}
+                      >
+                        Update Profile
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
               </div>
             </div>
           </CardContent>
