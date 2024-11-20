@@ -21,7 +21,7 @@ router.post(
       .isLength({ min: 8 })
       .withMessage('Password minimal 8 karakter'),
     body('phoneNumber')
-      .isMobilePhone('id-ID')
+      .isMobilePhone('any')
       .withMessage('Nomor HP tidak valid'),
   ],
   signupUser

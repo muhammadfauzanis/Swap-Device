@@ -6,6 +6,7 @@ import {
 import response from '../../response';
 import express from 'express';
 import bcrypt from 'bcrypt';
+import { validationResult } from 'express-validator';
 
 export const getDetailUser = async (
   req: express.Request,
@@ -81,6 +82,16 @@ export const updateUserData = async (
 
     // if user want to change phone number
     if (phoneNumber) {
+      // check user phone number format
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        const errorMessage = errors
+          .array()
+          .map((error) => error.msg)
+          .join(' & ');
+        return response(400, null, errorMessage, res);
+      }
+
       // check if phone number already registered, reject user request for update phone number
       const userPhoneNumber = await findUserByPhoneNumber(phoneNumber);
       if (userPhoneNumber) {
@@ -93,7 +104,7 @@ export const updateUserData = async (
       }
 
       if (user.phone_number === phoneNumber) {
-        return response(400, null, 'Your new phone number not different', res);
+        return response(400, null, 'Your phone number is not different', res);
       }
 
       // if all checking has completed and success, update user phone number
@@ -116,7 +127,7 @@ export const updateUserData = async (
 
     await updateUser(user.user_id, updatedData);
 
-    return response(200, updatedData, 'Update Data Successfully', res);
+    return response(200, updatedData, 'Successfully update data', res);
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error when update user data', res);
