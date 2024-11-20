@@ -103,7 +103,6 @@ const LoginPage = () => {
                 </Link>
               </CardDescription>
               <div
-                // href={`${process.env.NEXT_PUBLIC_API_URL}auth/google`}
                 className="pt-4"
               >
                 <Button

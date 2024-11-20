@@ -1,5 +1,6 @@
 'use client';
 
+import Footer from '@/components/Footer';
 import SideBarUser from '@/components/SideBarUser';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -14,7 +15,7 @@ interface UserDataProps {
   name: string;
   email: string;
   userId: number;
-  phoneNumber: string;
+  phone_number: string;
   balance: number;
   isVerified: boolean;
 }
@@ -45,8 +46,8 @@ const UserPage = () => {
   }, [userId]);
 
   return (
-    <div className="w-full min-h-screen">
-      <div className="mt-32 grid grid-rows-2 md:grid-rows-2 md:grid-cols-2 lg:grid-cols-3 justify-self-center gap-x-10 w-[70%] ">
+    <div className="w-full h-screen">
+      <div className="mt-16 lg:mt-32 grid grid-rows-2 grid-cols-1 items-center lg:items-start md:grid-rows-2 md:grid-cols-1 lg:grid-rows-1 lg:grid-cols-3 justify-self-center gap-x-5 xl:gap-x-10 w-[90%] xl:w-[80%]">
         {userData && (
           <SideBarUser name={userData.name} email={userData.email} />
         )}
@@ -56,12 +57,12 @@ const UserPage = () => {
             <h3 className="text-2xl font-bold">Informasi Akun</h3>
             <hr className="pb-10 mt-4" />
 
-            <div className="flex items-center justify-center gap-x-10 p-8">
-              <div className="bg-gray-200 p-8 rounded-full">
-                <FaUser size={180} />
+            <div className="flex flex-col md:flex-row items-center justify-center gap-x-10 p-2">
+              <div className="bg-gray-200 p-8 rounded-full w-fit m-auto">
+                <FaUser className="text-[80px] md:text-[120px] xl:text-[160px]" />
               </div>
 
-              <div className="w-[70%]">
+              <div className="w-[80%] md:w-[70%] m-auto">
                 <div className="space-y-2 pb-2">
                   <Label className="px-1">Email</Label>
                   <Input
@@ -78,7 +79,7 @@ const UserPage = () => {
 
                 <div className="space-y-2 pb-2">
                   <Label className="px-1">Nomor Telepon</Label>
-                  <Input defaultValue={userData?.phoneNumber} />
+                  <Input defaultValue={userData?.phone_number} />
                 </div>
 
                 <Button className="w-full mt-8">Update Profile</Button>
@@ -87,6 +88,8 @@ const UserPage = () => {
           </CardContent>
         </Card>
       </div>
+
+      <Footer />
     </div>
   );
 };

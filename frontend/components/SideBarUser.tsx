@@ -35,8 +35,8 @@ const SideBarUser = ({ name, email }: SideBarDataProps) => {
   return (
     <Card className="max-h-fit p-4">
       <CardContent>
-        <div className="p-3 space-y-16">
-          <div className="flex items-center gap-x-3">
+        <div className="p-2 space-y-16">
+          <div className="flex items-center gap-x-2 xl:gap-x-4 w-fit">
             <FaUser size={35} />
             <div className="">
               <p className="font-bold">{name}</p>
