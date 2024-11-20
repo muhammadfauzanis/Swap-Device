@@ -7,7 +7,7 @@ import {
   updatePassword,
   updateResetPasswordToken,
   updateUser,
-  updateUserData,
+  updateUserStatus,
   validateVerificationToken,
 } from '../../models/Users';
 import response from '../../response';
@@ -58,7 +58,7 @@ export const signupUser = async (
 
         sendVerificationEmail(email, verificationToken);
 
-        const userData = await updateUserData(
+        const userData = await updateUserStatus(
           userId,
           false, // isVerified
           verificationToken,
@@ -144,7 +144,7 @@ export const verifyUserAccount = async (
       return response(400, null, 'Verification code has expired', res);
     }
 
-    await updateUserData(user.user_id, true, null, null);
+    await updateUserStatus(user.user_id, true, null, null);
 
     return response(201, true, 'Success verified account', res);
   } catch (error) {
@@ -270,7 +270,9 @@ export const callbackLoginWithGoogle = async (
         isVerified: data.verified_email,
       });
     } else {
-      await updateUser(user.user_id, data?.name!);
+      const updatedData: any = {};
+      updatedData.name = data.name;
+      await updateUser(user.user_id, updatedData);
       userData = user;
     }
 
@@ -297,43 +299,6 @@ export const logoutUser = async (
   } catch (error) {
     console.log(error);
     return response(500, null, 'Error when logout user', res);
-  }
-};
-
-export const getDetailUser = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    const userId = parseInt(req.params.userId);
-
-    if (isNaN(userId)) {
-      return response(400, null, 'User id is required', res);
-    }
-
-    // check user has token or not
-    const token =
-      req.cookies.token || req.headers['authorization']?.split(' ')[1];
-    if (!token) {
-      return response(
-        401,
-        null,
-        `You don't have session token,please login`,
-        res
-      );
-    }
-
-    const user = await findUserById(userId);
-
-    // check user on database
-    if (!user) {
-      return response(404, null, 'User not found', res);
-    }
-
-    return response(200, user, 'Success retrieved detail user', res);
-  } catch (error) {
-    console.log(error);
-    return response(500, null, 'Error when get detail user', res);
   }
 };
 
