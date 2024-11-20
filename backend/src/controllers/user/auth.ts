@@ -270,9 +270,6 @@ export const callbackLoginWithGoogle = async (
         isVerified: data.verified_email,
       });
     } else {
-      const updatedData: any = {};
-      updatedData.name = data.name;
-      await updateUser(user.user_id, updatedData);
       userData = user;
     }
 
