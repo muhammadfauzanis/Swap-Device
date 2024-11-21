@@ -15,9 +15,6 @@
       "dest": "/dist/index.js"
     }
   ],
-  "env": {
-    "DATABASE_URL": "your-database-url"
-  },
   "build": {
     "env": {
       "DATABASE_URL": "your-database-url"
