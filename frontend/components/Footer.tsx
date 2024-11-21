@@ -71,7 +71,7 @@ const Footer = () => {
         </div>
       </div>
       <hr className="mb-5 mt-12" />
-      <h3 className="text-sm lg:text-md flex justify-end text-gray-400 pb-5">
+      <h3 className="text-sm lg:text-md flex justify-center md:justify-end text-gray-400 pb-5">
         Copyright &copy; 2024 Swap Device. All rights reserved
       </h3>
     </div>

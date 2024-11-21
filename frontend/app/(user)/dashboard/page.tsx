@@ -123,8 +123,20 @@ const UserPage = () => {
             className: 'font-bold text-green-600',
           });
 
-          // masi perlu dibenerin mau diapain pas sukses
-          window.location.reload();
+          // update data in sidebar with newest data
+          setUserData((prevData) => {
+            if (!prevData) return prevData;
+
+            return {
+              ...prevData,
+              name: userData.name ?? prevData.name,
+              phone_number: userData.phoneNumber ?? prevData.phone_number,
+            };
+          });
+
+          // update button condition
+          setIsLoading(false);
+          setIsDisabled(true);
         }
       } catch (error: any) {
         setIsLoading(false);
@@ -177,7 +189,7 @@ const UserPage = () => {
   }, [watch, userData]);
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full min-h-screen">
       <div className="mt-16 lg:mt-32 grid grid-rows-2 grid-cols-1 items-center lg:items-start md:grid-rows-2 md:grid-cols-1 lg:grid-rows-1 lg:grid-cols-3 justify-self-center gap-x-5 xl:gap-x-10 w-[90%] xl:w-[80%]">
         {userData && (
           <SideBarUser name={userData.name} email={userData.email} />
