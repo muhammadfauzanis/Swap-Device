@@ -27,7 +27,7 @@ const Navbar = () => {
     { name: 'iPad', link: '/' },
     { name: 'Mac', link: '/' },
     { name: 'Watch', link: '/' },
-    { name: 'Airpods', link: '/' },
+    { name: 'AirPods', link: '/' },
   ];
 
   useEffect(() => {

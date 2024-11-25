@@ -25,9 +25,9 @@ const Hero = () => {
       <hr className="mb-5 mt-12" />
       <ProductCarousel productType="iPhone" imageSource="/iphone_hero.png" />
       <ProductCarousel productType="iPad" imageSource="/ipad.jpg" />
-      <ProductCarousel productType="Macbook" imageSource="/macbook.jpg" />
+      <ProductCarousel productType="MacBook" imageSource="/macbook.jpg" />
       <ProductCarousel productType="Watch" imageSource="/watch.png" />
-      <ProductCarousel productType="Airpods" imageSource="/airpods.png" />
+      <ProductCarousel productType="AirPods" imageSource="/airpods.png" />
     </div>
   );
 };
