@@ -14,25 +14,52 @@ datasource db {
   // directUrl = env("DIRECT_URL")
 }
 
-model User{
-  user_id       Int     @id @default(autoincrement())
-  email         String  @unique
-  phone_number  String? @unique
-  name          String
-  password      String?
-  auth_provider AuthProvider @default(CREDENTIALS)
-  balance       Int          @default(0)
-  isVerified    Boolean      @default(false)
-  created_at    DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
-  verificationToken   Int? 
-  resetPasswordToken  String?
-  verificationTokenExpired   DateTime?
-  resetPasswordTokenExpired  DateTime?
+model User {
+  user_id                   Int          @id @default(autoincrement())
+  email                     String       @unique
+  phone_number              String?      @unique
+  name                      String
+  password                  String?
+  auth_provider             AuthProvider @default(CREDENTIALS)
+  balance                   Int          @default(0)
+  isVerified                Boolean      @default(false)
+  created_at                DateTime     @default(now())
+  updated_at                DateTime     @updatedAt
+  verificationToken         Int?
+  resetPasswordToken        String?
+  verificationTokenExpired  DateTime?
+  resetPasswordTokenExpired DateTime?
 }
 
-enum AuthProvider{
+model Category {
+  category_id   Int    @id @default(autoincrement())
+  category_name String
+
+  products Product[] @relation("CategoryProduct")
+}
+
+model Product {
+  product_id           Int      @id @default(autoincrement())
+  product_name         String
+  product_image        String[]
+  code                 String
+  price                Int
+  storage              String
+  color                String
+  regional_code        String
+  active_warranty      String
+  status               Boolean
+  condition            String[]
+  condition_percentage Int
+  completness          String[]
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  category    Category @relation("CategoryProduct", fields: [category_id], references: [category_id])
+  category_id Int
+}
+
+enum AuthProvider {
   CREDENTIALS
   GOOGLE
 }
-
