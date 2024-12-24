@@ -50,6 +50,7 @@ model Product {
   color                String
   regional_code        String
   active_warranty      String
+  battery_healt        Int
   status               Boolean
   condition            String[]
   condition_percentage Int

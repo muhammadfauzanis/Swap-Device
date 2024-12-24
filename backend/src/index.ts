@@ -29,6 +29,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
