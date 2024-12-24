@@ -58,6 +58,10 @@ const DetailProductPage = () => {
             <span className="font-normal">Aktif s/d 18 Agustus 2025</span>
           </p>
 
+          <p className="font-bold">
+            Battery Healt: <span className="font-normal">90%</span>
+          </p>
+
           <div className="">
             <h4 className="font-bold">Kondisi:</h4>
             <ul className="list-disc list-inside grid grid-cols-2 px-2 gap-x-3 justify-between">
