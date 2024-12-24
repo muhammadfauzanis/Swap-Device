@@ -29,13 +29,15 @@ model User {
   resetPasswordToken        String?
   verificationTokenExpired  DateTime?
   resetPasswordTokenExpired DateTime?
+
+  wishlist Wishlist[] @relation("UserWishlist")
 }
 
 model Category {
   category_id   Int    @id @default(autoincrement())
   category_name String
 
-  products Product[] @relation("CategoryProduct")
+  product Product[] @relation("CategoryProduct")
 }
 
 model Product {
@@ -57,6 +59,17 @@ model Product {
 
   category    Category @relation("CategoryProduct", fields: [category_id], references: [category_id])
   category_id Int
+
+  wishlist Wishlist[] @relation("ProductWishlist")
+}
+
+model Wishlist {
+  wishlist_id Int      @id @default(autoincrement())
+  user        User     @relation("UserWishlist", fields: [user_id], references: [user_id])
+  user_id     Int
+  product     Product  @relation("ProductWishlist", fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: Cascade)
+  product_id  Int
+  added_at    DateTime @default(now())
 }
 
 enum AuthProvider {
