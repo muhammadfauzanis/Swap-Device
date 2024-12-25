@@ -14,12 +14,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/hooks/use-toast';
-import { AxiosInstance } from '@/lib/axios';
-import { getDecodeJwt, getToken } from '@/utils/auth';
+import { UserData } from '@/features/UserData';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaUser } from 'react-icons/fa';
 import { z } from 'zod';
@@ -50,45 +47,8 @@ const updateDataFormSchema = z.object({
 
 type UpdateDataFormSchema = z.infer<typeof updateDataFormSchema>;
 
-interface UserDataProps {
-  userId: number;
-  name: string;
-  email: string;
-  // password: string;
-  phone_number: string;
-  balance: number;
-  isVerified: boolean;
-}
-
 const UserPage = () => {
-  const [userData, setUserData] = useState<UserDataProps | null>(null);
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  const token = getToken();
-  const decodeData = getDecodeJwt();
-  const userId = decodeData?.userId;
-
-  // function to get user data from db
-  const getUserData = async () => {
-    try {
-      const userResponse = await AxiosInstance(`/user/user-detail/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (userResponse.data.status === 200) {
-        setUserData(userResponse.data.data);
-      }
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, [userId]);
+  const { data: userData, updateUserData, isLoading, isDisabled } = UserData();
 
   // function to validate form update data
   const form = useForm<UpdateDataFormSchema>({
@@ -101,55 +61,7 @@ const UserPage = () => {
     },
   });
 
-  const { handleSubmit, control, watch, reset } = form;
-
-  // function to call API update data user
-  const updateUserData = (userData: {
-    name?: string;
-    phoneNumber?: string;
-  }) => {
-    setIsLoading(true);
-    setTimeout(async () => {
-      try {
-        const userResponse = await AxiosInstance.put(
-          `/user/update-user/${userId}`,
-          userData,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        if (userResponse.status === 200) {
-          toast({
-            description: 'Update data berhasil',
-            className: 'font-bold text-green-600',
-          });
-
-          // update data in sidebar with newest data
-          setUserData((prevData) => {
-            if (!prevData) return prevData;
-
-            return {
-              ...prevData,
-              name: userData.name ?? prevData.name,
-              phone_number: userData.phoneNumber ?? prevData.phone_number,
-            };
-          });
-
-          // update button condition
-          setIsLoading(false);
-          setIsDisabled(true);
-        }
-      } catch (error: any) {
-        setIsLoading(false);
-        toast({
-          variant: 'default',
-          title: error.response.data.message,
-          className: 'text-red-500',
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        console.log(error.response);
-      }
-    }, 3000);
-  };
+  const { handleSubmit, control, reset } = form;
 
   const onSubmit = handleSubmit((values) => {
     const updatedData: { name?: string; phoneNumber?: string } = {};
@@ -176,24 +88,10 @@ const UserPage = () => {
     }
   }, [userData, form]);
 
-  useEffect(() => {
-    const formValues = watch();
-
-    // Cek apakah ada perubahan pada form dibandingkan dengan nilai asli userData
-    if (
-      formValues.name !== userData?.name ||
-      formValues.phoneNumber !== userData?.phone_number
-    ) {
-      setIsDisabled(false);
-    }
-  }, [watch, userData]);
-
   return (
     <div className="w-full h-screen">
       <div className="mt-16 lg:mt-32 grid grid-rows-2 grid-cols-1 items-center lg:items-start md:grid-rows-2 md:grid-cols-1 lg:grid-rows-1 lg:grid-cols-3 justify-self-center gap-x-5 xl:gap-x-10 w-[90%] xl:w-[80%]">
-        {userData && (
-          <SideBarUser name={userData.name} email={userData.email} />
-        )}
+        {userData && <SideBarUser />}
 
         <Card className="lg:col-span-2 p-4">
           <CardContent>

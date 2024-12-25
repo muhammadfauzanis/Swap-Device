@@ -1,36 +1,15 @@
 'use client';
 
 import { AxiosInstance } from '@/lib/axios';
-import { removeToken } from '@/utils/auth';
-import { useState } from 'react';
+import { getDecodeJwt, getToken, removeToken } from '@/utils/auth';
+import { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { Card, CardContent } from './ui/card';
+import Link from 'next/link';
+import { UserData } from '@/features/UserData';
 
-interface SideBarDataProps {
-  name: string;
-  email: string;
-}
-
-const SideBarUser = ({ name, email }: SideBarDataProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const logOutUser = () => {
-    setIsLoading(true);
-    setTimeout(async () => {
-      try {
-        const userResponse = await AxiosInstance.post('/auth/logout');
-
-        if (userResponse.status === 200) {
-          removeToken();
-          window.location.href = '/';
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 3000);
-  };
+const SideBarUser = () => {
+  const { data: userData, isDisabled, isLoading, logOutUser } = UserData(); // get data from class has created
 
   return (
     <Card className="max-h-fit p-4">
@@ -39,8 +18,8 @@ const SideBarUser = ({ name, email }: SideBarDataProps) => {
           <div className="flex items-center gap-x-2 xl:gap-x-4 w-fit">
             <FaUser size={35} />
             <div className="">
-              <p className="font-bold">{name}</p>
-              <p className="text-sm">{email}</p>
+              <p className="font-bold">{userData?.name}</p>
+              <p className="text-sm">{userData?.email}</p>
             </div>
           </div>
 
@@ -50,16 +29,22 @@ const SideBarUser = ({ name, email }: SideBarDataProps) => {
             </button>
             <hr />
             <button className="hover:-translate-y-0.5 transition-all duration-300">
-              Dashboard Pembelian
+              <Link href="/dashboard/buying-dashboard">
+                Dashboard Pembelian
+              </Link>
             </button>
             <hr />
             <button className="hover:-translate-y-0.5 transition-all duration-300">
-              Dashboard Penjualan
+              <Link href="/dashboard/selling-dashboard">
+                Dashboard Penjualan
+              </Link>
             </button>
             <hr />
             <button
-              className="text-red-600  hover:-translate-y-0.5 transition-all duration-300"
-              disabled={isLoading}
+              className={`${
+                isLoading ? 'text-gray-300' : 'text-red-600'
+              }  hover:-translate-y-0.5 transition-all duration-300`}
+              disabled={isLoading || isDisabled}
               onClick={logOutUser}
             >
               Keluar
