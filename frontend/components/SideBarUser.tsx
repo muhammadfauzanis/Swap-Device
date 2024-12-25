@@ -1,15 +1,14 @@
 'use client';
 
-import { AxiosInstance } from '@/lib/axios';
-import { getDecodeJwt, getToken, removeToken } from '@/utils/auth';
-import { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { Card, CardContent } from './ui/card';
 import Link from 'next/link';
 import { UserData } from '@/features/UserData';
+import { Auth } from '@/features/Auth';
 
 const SideBarUser = () => {
-  const { data: userData, isDisabled, isLoading, logOutUser } = UserData(); // get data from class has created
+  const { data: userData, isDisabled, isLoading } = UserData(); // get data from class has created
+  const { logOutUser } = Auth();
 
   return (
     <Card className="max-h-fit p-4">

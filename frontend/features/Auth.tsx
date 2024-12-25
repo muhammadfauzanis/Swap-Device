@@ -8,13 +8,14 @@ import {
   ResetPasswordFormSchema,
   VerifyFormSchema,
 } from '@/lib/formValidator';
-import { setToken } from '@/utils/auth';
+import { removeToken, setToken } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [isRegistered, setIsRegistered] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
@@ -173,6 +174,27 @@ export const Auth = () => {
     }, 3000);
   };
 
+  // handle logout user
+  const logOutUser = () => {
+    setIsLoading(true);
+    setIsDisabled(true);
+    setTimeout(async () => {
+      try {
+        const userResponse = await AxiosInstance.post('/auth/logout');
+
+        if (userResponse.status === 200) {
+          removeToken();
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+        setIsDisabled(false);
+      }
+    }, 3000);
+  };
+
   return {
     registerUser,
     loginUser,
@@ -180,6 +202,7 @@ export const Auth = () => {
     verifyUser,
     forgotPasswordUser,
     resetPasswordUser,
+    logOutUser,
     isLoading,
     isRegistered,
     isSubmitted,
