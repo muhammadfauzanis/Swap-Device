@@ -20,46 +20,14 @@ import {
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { ToastAction } from '@/components/ui/toast';
-import { AxiosInstance } from '@/lib/axios';
 import VerifyUserPage from './VerifyUser';
-
-const registerFormSchema = z
-  .object({
-    name: z
-      .string()
-      .min(1, 'Nama tidak boleh kosong')
-      .max(50, 'Nama maksimal 50 karakter'),
-    email: z.string().email('Masukkan email yang valid'),
-    phoneNumber: z
-      .string()
-      .min(6, 'Masukkan nomor telepon yang valid')
-      .max(15, 'Masukkan nomor telepon yang valid')
-      .regex(
-        /^(?:\+?[1-9][0-9]{0,2})?[08|09][0-9]{7,11}$/,
-        'Masukkan nomor telepon yang valid'
-      ),
-    password: z
-      .string()
-      .min(8, 'Kata sandi minimal 8 karakter')
-      .max(20, 'Kata sandi maksimal 20 karakter'),
-    repassword: z.string(),
-  })
-  .refine((data) => data.password === data.repassword, {
-    message: 'Kata sandi konfirmasi tidak cocok dengan kata sandi anda',
-    path: ['repassword'],
-  });
-
-type RegisterFormSchema = z.infer<typeof registerFormSchema>;
+import { registerFormSchema, RegisterFormSchema } from '@/lib/formValidator';
+import { Auth } from '@/features/Auth';
 
 const RegisterPage = () => {
-  const { toast } = useToast();
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [isLoading, SetIsLoading] = useState(false);
+  const { registerUser, isRegistered, isLoading } = Auth();
   const [email, setEmail] = useState('');
 
   const form = useForm<RegisterFormSchema>({
@@ -75,33 +43,9 @@ const RegisterPage = () => {
 
   const { handleSubmit, control, reset } = form;
 
-  // function to handle post request for signup user
-  const createUser = async (userData: RegisterFormSchema) => {
-    SetIsLoading(true);
-    setTimeout(async () => {
-      try {
-        const userResponse = await AxiosInstance.post('/auth/signup', userData);
-
-        if (userResponse.status === 201 || userResponse.status === 200) {
-          setIsRegistered(true);
-          reset();
-        }
-      } catch (error: any) {
-        SetIsLoading(false);
-        toast({
-          variant: 'default',
-          title: error.response.data.message,
-          className: 'text-red-500',
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        console.log(error.response);
-      }
-    }, 3000);
-  };
-
   const onSubmit = handleSubmit((values) => {
     // call createUser function and throw values
-    createUser(values);
+    registerUser(values);
     setEmail(values.email);
   });
 

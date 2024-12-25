@@ -21,27 +21,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import { z } from 'zod';
 import { FcGoogle } from 'react-icons/fc';
-import { useEffect, useState } from 'react';
-import { AxiosInstance } from '@/lib/axios';
-import { useToast } from '@/hooks/use-toast';
-import { ToastAction } from '@/components/ui/toast';
-import { setToken } from '@/utils/auth';
-
-const loginFormSchema = z.object({
-  email: z.string().email('Masukkan email yang valid'),
-  password: z
-    .string()
-    .min(8, 'Kata sandi minimal 8 karakter')
-    .max(20, 'Kata sandi maksimal 20 karakter'),
-});
-
-type LoginFormSchema = z.infer<typeof loginFormSchema>;
+import { loginFormSchema, LoginFormSchema } from '@/lib/formValidator';
+import { Auth } from '@/features/Auth';
 
 const LoginPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const { loginUser, handleGoogleLogin, isLoading } = Auth();
 
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -51,39 +36,7 @@ const LoginPage = () => {
     },
   });
 
-  const { handleSubmit, control, reset } = form;
-
-  const loginUser = async (userData: LoginFormSchema) => {
-    setIsLoading(true);
-    setTimeout(async () => {
-      try {
-        const userResponse = await AxiosInstance.post('/auth/login', userData);
-
-        if (userResponse.status === 200) {
-          window.location.href = '/';
-          setToken(userResponse.data.data.token);
-          reset();
-        }
-      } catch (error: any) {
-        setIsLoading(false);
-        toast({
-          variant: 'default',
-          title: error.response.data.message,
-          className: 'text-red-500',
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        console.log(error.response);
-      }
-    }, 3000);
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      window.location.href = process.env.NEXT_PUBLIC_API_URL + 'auth/google';
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { handleSubmit, control } = form;
 
   const onSubmit = handleSubmit((values) => {
     loginUser(values);
@@ -102,9 +55,7 @@ const LoginPage = () => {
                   Register di sini
                 </Link>
               </CardDescription>
-              <div
-                className="pt-4"
-              >
+              <div className="pt-4">
                 <Button
                   variant={'outline'}
                   className="w-full max-w-[70%] xl:w-[60%] m-auto flex justify-center items-center gap-x-5 shadow-md"
