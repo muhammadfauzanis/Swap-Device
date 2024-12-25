@@ -18,40 +18,22 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/hooks/use-toast';
-import { AxiosInstance } from '@/lib/axios';
+import { Auth } from '@/features/Auth';
+import {
+  resetPasswordFormSchema,
+  ResetPasswordFormSchema,
+} from '@/lib/formValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-const resetPasswordFormSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, 'Kata sandi minimal 8 karakter')
-      .max(20, 'Kata sandi maksimal 20 karakter'),
-    rePassword: z.string(),
-  })
-  .refine((data) => data.password === data.rePassword, {
-    message: 'Kata sandi konfirmasi tidak cocok dengan kata sandi anda',
-    path: ['rePassword'],
-  });
-
-type ResetPasswordFormSchema = z.infer<typeof resetPasswordFormSchema>;
 
 interface ResetPasswordPageProps {
   params: { slug: string };
 }
 
 const ResetPasswordPage = (props: ResetPasswordPageProps) => {
+  const { resetPasswordUser, isLoading } = Auth();
   const { params } = props;
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  const router = useRouter();
 
   const form = useForm<ResetPasswordFormSchema>({
     resolver: zodResolver(resetPasswordFormSchema),
@@ -61,43 +43,10 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
     },
   });
 
-  const { handleSubmit, control, reset } = form;
-
-  const resetPasswordUser = (userData: ResetPasswordFormSchema) => {
-    setIsLoading(true);
-    setTimeout(async () => {
-      try {
-        const userResponse = await AxiosInstance.post(
-          `/auth/reset-password/${params.slug}`,
-          userData
-        );
-
-        if (userResponse.status === 200) {
-          toast({
-            description:
-              'Atur ulang kata sandi berhasil, anda akan kembali ke halaman login...',
-            className: 'font-bold text-green-600',
-          });
-
-          setTimeout(() => {
-            router.push('/login');
-          }, 3000);
-        }
-      } catch (error: any) {
-        setIsLoading(false);
-        toast({
-          variant: 'default',
-          title: error.response.data.message,
-          className: 'text-red-500',
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        console.log(error?.response);
-      }
-    }, 3000);
-  };
+  const { handleSubmit, control } = form;
 
   const onSubmit = handleSubmit((values) => {
-    resetPasswordUser(values);
+    resetPasswordUser(values, params);
   });
 
   return (

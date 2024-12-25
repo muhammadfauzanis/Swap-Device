@@ -41,7 +41,7 @@ const RegisterPage = () => {
     },
   });
 
-  const { handleSubmit, control, reset } = form;
+  const { handleSubmit, control } = form;
 
   const onSubmit = handleSubmit((values) => {
     // call createUser function and throw values

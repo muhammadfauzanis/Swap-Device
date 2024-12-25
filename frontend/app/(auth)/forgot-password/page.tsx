@@ -18,26 +18,18 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/hooks/use-toast';
-import { AxiosInstance } from '@/lib/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { TbMailCheck } from 'react-icons/tb';
-
-const forgotPasswordFormSchema = z.object({
-  email: z.string().email('Masukkan email yang valid'),
-});
-
-type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>;
+import {
+  forgotPasswordFormSchema,
+  ForgotPasswordFormSchema,
+} from '@/lib/formValidator';
+import { Auth } from '@/features/Auth';
 
 const ForgotPasswordPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const { toast } = useToast();
+  const { forgotPasswordUser, isLoading, isSubmitted } = Auth();
 
   const form = useForm<ForgotPasswordFormSchema>({
     resolver: zodResolver(forgotPasswordFormSchema),
@@ -46,34 +38,7 @@ const ForgotPasswordPage = () => {
     },
   });
 
-  const { handleSubmit, control, reset } = form;
-
-  const forgotPasswordUser = (userData: ForgotPasswordFormSchema) => {
-    setIsLoading(true);
-    setTimeout(async () => {
-      try {
-        const userResponse = await AxiosInstance.post(
-          '/auth/forgot-password',
-          userData
-        );
-
-        if (userResponse.status === 200) {
-          setIsSubmitted(true);
-
-          reset();
-        }
-      } catch (error: any) {
-        setIsLoading(false);
-        toast({
-          variant: 'default',
-          title: error.response.data.message,
-          className: 'text-red-500',
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        console.log(error.response);
-      }
-    }, 3000);
-  };
+  const { handleSubmit, control } = form;
 
   const onSubmit = handleSubmit((value) => {
     forgotPasswordUser(value);

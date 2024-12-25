@@ -39,3 +39,33 @@ export const registerFormSchema = z
   });
 
 export type RegisterFormSchema = z.infer<typeof registerFormSchema>;
+
+// verify form validator
+export const verifyFormSchema = z.object({
+  verificationToken: z.string().min(6, 'Masukkan 6 digit token verifikasi'),
+});
+
+export type VerifyFormSchema = z.infer<typeof verifyFormSchema>;
+
+// forgot password form validator
+export const forgotPasswordFormSchema = z.object({
+  email: z.string().email('Masukkan email yang valid'),
+});
+
+export type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>;
+
+// reset password form validator
+export const resetPasswordFormSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, 'Kata sandi minimal 8 karakter')
+      .max(20, 'Kata sandi maksimal 20 karakter'),
+    rePassword: z.string(),
+  })
+  .refine((data) => data.password === data.rePassword, {
+    message: 'Kata sandi konfirmasi tidak cocok dengan kata sandi anda',
+    path: ['rePassword'],
+  });
+
+export type ResetPasswordFormSchema = z.infer<typeof resetPasswordFormSchema>;

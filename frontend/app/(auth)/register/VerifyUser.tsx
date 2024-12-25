@@ -20,68 +20,28 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/hooks/use-toast';
-import { AxiosInstance } from '@/lib/axios';
+import { Auth } from '@/features/Auth';
+import { verifyFormSchema, VerifyFormSchema } from '@/lib/formValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-const verifyFormSchema = z.object({
-  verificationToken: z.string().min(6, 'Masukkan 6 digit token verifikasi'),
-});
-
-type VerifyFormSchema = z.infer<typeof verifyFormSchema>;
 
 interface VerifyUserPageProps {
   userEmail: string;
 }
 
 const VerifyUserPage = ({ userEmail }: VerifyUserPageProps) => {
-  const [isLoading, setSetIsLoading] = useState(false);
-  const { toast } = useToast();
-  const router = useRouter();
+  const { verifyUser, isLoading } = Auth();
 
   const form = useForm<VerifyFormSchema>({
     resolver: zodResolver(verifyFormSchema),
     defaultValues: { verificationToken: '' },
   });
 
-  const { handleSubmit, control, reset } = form;
-
-  const verifiedUser = async (token: VerifyFormSchema) => {
-    setSetIsLoading(true);
-    setTimeout(async () => {
-      try {
-        const verificationToken = parseInt(token.verificationToken);
-
-        const userResponse = await AxiosInstance.post('/auth/verify', {
-          email: userEmail,
-          verificationToken,
-        });
-
-        if (userResponse.status === 201) {
-          router.push('/login');
-          reset();
-        }
-      } catch (error: any) {
-        setSetIsLoading(false);
-        toast({
-          variant: 'default',
-          title: error.response.data.message,
-          className: 'text-red-500',
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        console.log(error.response);
-      }
-    }, 3000);
-  };
+  const { handleSubmit, control } = form;
 
   const onSubmit = handleSubmit((values) => {
-    verifiedUser(values);
+    verifyUser(values, userEmail);
   });
 
   return (
