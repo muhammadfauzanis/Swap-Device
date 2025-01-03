@@ -4,15 +4,12 @@ import Footer from '@/components/Footer';
 import SideBarUser from '@/components/SideBarUser';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import Link from 'next/link';
-import { AiOutlineStock } from 'react-icons/ai';
-import { CiShop } from 'react-icons/ci';
 import { IoAdd } from 'react-icons/io5';
 import { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import SellingProduct from '@/components/layout/SellingProduct';
 import SellingHistory from '@/components/layout/SellingHistory';
-import TransactionOverview from '@/components/layout/TransactionOverview';
+import TransactionOverview from '@/components/TransactionOverview';
 
 const SellingDashboard = () => {
   const [activeTab, setActiveTab] = useState('Produk'); // Default ke Produk
@@ -28,7 +25,7 @@ const SellingDashboard = () => {
             <hr className="pb-5 mt-5" />
 
             <TransactionOverview
-              title1="Pendapatan"
+              title1="Total Pendapatan"
               price="IDR 50.000.000"
               title2="Penjualan"
               amount="2"

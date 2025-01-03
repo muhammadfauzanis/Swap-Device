@@ -62,7 +62,7 @@ const SellingHistory = () => {
           <TableBody>
             {products.map((product) => (
               <TableRow key={product.code}>
-                <TableCell className="font-medium">{product.code}</TableCell>
+                <TableCell>{product.code}</TableCell>
                 <TableCell>{product.category}</TableCell>
                 <TableCell>{product.model}</TableCell>
                 <TableCell>{product.price}</TableCell>
