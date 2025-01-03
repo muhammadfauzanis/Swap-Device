@@ -91,7 +91,7 @@ const UserPage = () => {
   return (
     <div className="w-full h-screen">
       <div className="mt-16 lg:mt-32 grid grid-rows-2 grid-cols-1 items-center lg:items-start md:grid-rows-2 md:grid-cols-1 lg:grid-rows-1 lg:grid-cols-3 justify-self-center gap-x-5 xl:gap-x-10 w-[90%] xl:w-[80%]">
-        {userData && <SideBarUser />}
+        <SideBarUser />
 
         <Card className="lg:col-span-2 p-4">
           <CardContent>

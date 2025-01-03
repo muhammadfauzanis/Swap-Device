@@ -174,27 +174,6 @@ export const Auth = () => {
     }, 3000);
   };
 
-  // handle logout user
-  const logOutUser = () => {
-    setIsLoading(true);
-    setIsDisabled(true);
-    setTimeout(async () => {
-      try {
-        const userResponse = await AxiosInstance.post('/auth/logout');
-
-        if (userResponse.status === 200) {
-          removeToken();
-          window.location.href = '/';
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-        setIsDisabled(false);
-      }
-    }, 3000);
-  };
-
   return {
     registerUser,
     loginUser,
@@ -202,9 +181,9 @@ export const Auth = () => {
     verifyUser,
     forgotPasswordUser,
     resetPasswordUser,
-    logOutUser,
     isLoading,
     isRegistered,
     isSubmitted,
+    isDisabled,
   };
 };

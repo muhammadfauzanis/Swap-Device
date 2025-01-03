@@ -89,6 +89,7 @@ export const UserData = () => {
     }, 3000);
   };
 
+  // handle logout user
   const logOutUser = () => {
     setIsLoading(true);
     setIsDisabled(true);
