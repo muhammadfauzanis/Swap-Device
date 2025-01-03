@@ -103,9 +103,6 @@ export const UserData = () => {
         }
       } catch (error) {
         console.log(error);
-      } finally {
-        setIsLoading(false);
-        setIsDisabled(false);
       }
     }, 3000);
   };
