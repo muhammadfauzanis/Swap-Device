@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import SellingProduct from '@/components/layout/SellingProduct';
 import SellingHistory from '@/components/layout/SellingHistory';
+import TransactionOverview from '@/components/layout/TransactionOverview';
 
 const SellingDashboard = () => {
   const [activeTab, setActiveTab] = useState('Produk'); // Default ke Produk
@@ -26,30 +27,12 @@ const SellingDashboard = () => {
             <h3 className="text-2xl font-bold">Dashboard Penjualan</h3>
             <hr className="pb-5 mt-5" />
 
-            <div className="grid grid-cols-2 gap-x-8">
-              <Card>
-                <CardContent>
-                  <div className="flex items-center gap-x-4 p-2">
-                    <AiOutlineStock size={50} />
-                    <div className="">
-                      <p>Pendapatan</p>
-                      <p>Rp. 50.000.000</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <div className="flex items-center gap-x-4 p-2">
-                    <CiShop size={50} />
-                    <div className="">
-                      <p>Penjualan</p>
-                      <p>2</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            <TransactionOverview
+              title1="Pendapatan"
+              price="IDR 50.000.000"
+              title2="Penjualan"
+              amount="2"
+            />
 
             <hr className="pb-5 mt-5" />
 
